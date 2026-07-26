@@ -44,13 +44,13 @@ services:
       APP_ENV: ${APP_ENV}
       APP_DEBUG: ${APP_DEBUG}
       LOG_LEVEL: ${LOG_LEVEL}
-      SERVER_NAME: ':80'
+      PORT: ${PORT:-80}
     cap_add:
       - SYS_PTRACE
     volumes:
       - "./:/app"
     ports:
-      - "80:80"
+      - "${PORT:-80}:${PORT:-80}"
     depends_on:
       postgres:
         condition: service_healthy

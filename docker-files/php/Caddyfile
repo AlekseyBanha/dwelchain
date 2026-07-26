@@ -1,0 +1,43 @@
+# FrankenPHP / Caddy
+# Listen on $PORT (Render injects it at runtime). Default 80 for local compose.
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	# Render (and similar PaaS) terminate TLS and forward HTTP.
+	# Port-only site addresses disable automatic HTTPS.
+	auto_https off
+
+	frankenphp {
+		{$FRANKENPHP_CONFIG}
+	}
+
+	# Trust X-Forwarded-* from the platform reverse proxy.
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+:{$PORT:80} {
+	log {
+		{$CADDY_SERVER_LOG_OPTIONS}
+		format filter {
+			wrap console
+			fields {
+				uri query {
+					replace authorization REDACTED
+				}
+			}
+		}
+	}
+
+	root * {$SERVER_ROOT:/app/public}
+	encode zstd br gzip
+
+	{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+	php_server {
+		{$FRANKENPHP_SERVER_CONFIG}
+	}
+}

@@ -5,6 +5,10 @@
 # База: dunglas/frankenphp (Caddy + PHP в одном процессе).
 # PHP 8.4 — требование Symfony 8.x / Laravel 13.
 #
+# Порт: Caddyfile слушает :{$PORT:80}.
+#   Локально — PORT=80 (compose).
+#   Render  — платформа подставляет PORT (обычно 10000).
+#
 # Targets:
 #   builder          — общие PHP-расширения + composer
 #   php-franken      — production: код + composer --no-dev
@@ -32,6 +36,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN rm -rf /app/public
 
 COPY ./docker-files/php/config/php.ini $PHP_INI_DIR/php.ini
+
+# Caddyfile: listen on :{$PORT:80} (Render sets PORT at runtime; local default 80).
+# Do NOT bake SERVER_NAME=:${PORT} via ENV — Docker expands it at build time only.
+COPY ./docker-files/php/Caddyfile /etc/caddy/Caddyfile
 
 # ---------- production ----------
 FROM builder AS php-franken
