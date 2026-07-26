@@ -1,0 +1,58 @@
+# ============================================================
+# docker-compose.dev.yaml — локальная разработка
+# ============================================================
+# Используется вместе с базовым compose:
+#   docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build
+#
+# Отличия от prod:
+#   - target php-franken-dev (без запекания кода в образ)
+#   - volume ./:/app — live-reload исходников
+#   - postgres проброшен на localhost:5432
+#   - client: APP_ENV/APP_DEBUG из .env, SYS_PTRACE для отладки
+# ============================================================
+
+version: '3.11'
+
+volumes:
+  postgres:
+
+services:
+  postgres:
+    extends:
+      file: ./docker-compose.yaml
+      service: postgres
+    ports:
+      - 5432:5432
+
+  # Одноразовый сервис: composer install в смонтированный /app
+  client-dev-build:
+    build:
+      target: php-franken-dev
+    command:
+      - /usr/local/bin/composer
+      - install
+    volumes:
+      - "./:/app"
+
+  client:
+    extends:
+      file: ./docker-compose.yaml
+      service: client
+    build:
+      target: php-franken-dev
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_DEBUG: ${APP_DEBUG}
+      LOG_LEVEL: ${LOG_LEVEL}
+      SERVER_NAME: ':80'
+    cap_add:
+      - SYS_PTRACE
+    volumes:
+      - "./:/app"
+    ports:
+      - "80:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      client-dev-build:
+        condition: service_completed_successfully

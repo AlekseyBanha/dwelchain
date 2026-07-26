@@ -1,0 +1,85 @@
+# ============================================================
+# docker-compose.yaml — базовый (prod-like) compose
+# ============================================================
+# Сервисы на текущем этапе:
+#   postgres — PostgreSQL 16
+#   client   — Laravel-приложение на FrankenPHP (порт 80)
+#
+# Dev-оверрайды: docker-compose.dev.yaml
+# Запуск prod-like: docker compose up --build
+# Запуск dev:       docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build
+# ============================================================
+
+version: '3.11'
+
+volumes:
+  postgres:
+
+services:
+  # ----------------------------------------------------------
+  # PostgreSQL
+  # ----------------------------------------------------------
+  # Данные в named volume `postgres`.
+  # При первом старте выполняется init-db.sh:
+  #   создаёт DB_DATABASE / DB_USERNAME / DB_PASSWORD из .env
+  # ----------------------------------------------------------
+  postgres:
+    image: postgres:16.0
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_ROOT_PASSWORD}
+
+      # START # first init vars
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # END # first init vars
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./docker-files/postgres/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ----------------------------------------------------------
+  # client — Laravel (FrankenPHP)
+  # ----------------------------------------------------------
+  # Отдаёт приложение на :80.
+  # Зависит от healthy postgres.
+  # ----------------------------------------------------------
+  client:
+    build:
+      target: php-franken
+    image: dwelchain-client:latest
+    environment:
+      APP_NAME: ${APP_NAME:-Dwelchain}
+      APP_ENV: ${APP_ENV:-production}
+      APP_KEY: ${APP_KEY}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_URL: ${APP_URL:-http://localhost}
+
+      DB_CONNECTION: pgsql
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+      LOG_CHANNEL: ${LOG_CHANNEL:-stack}
+      LOG_LEVEL: ${LOG_LEVEL:-error}
+
+      SESSION_DRIVER: ${SESSION_DRIVER:-database}
+      CACHE_STORE: ${CACHE_STORE:-database}
+      QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    depends_on:
+      postgres:
+        condition: service_healthy

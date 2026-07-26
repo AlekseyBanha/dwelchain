@@ -1,0 +1,56 @@
+{
+  "tenant": {
+    "name": "Олена Коваль",
+    "email": "olena.koval@example.com",
+    "phone": "+380 67 000 12 34",
+    "city": "Київ",
+    "savedPropertyIds": ["obolon-terrace", "lipky-apartment", "podil-duplex-rent"],
+    "viewings": [
+      {
+        "propertyId": "obolon-terrace",
+        "date": "30 липня 2026",
+        "time": "18:30",
+        "status": "Потребує підтвердження"
+      },
+      {
+        "propertyId": "lipky-apartment",
+        "date": "24 липня 2026",
+        "time": "12:00",
+        "status": "Завершено"
+      }
+    ]
+  },
+  "landlord": {
+    "name": "Андрій Мельник",
+    "email": "andrii.melnyk@example.com",
+    "phone": "+380 93 000 56 78",
+    "city": "Київ",
+    "propertyIds": ["obolon-terrace", "podil-duplex-rent"],
+    "requests": [
+      {
+        "id": "REQ-1042",
+        "propertyId": "obolon-terrace",
+        "client": "Марія С.",
+        "date": "30 липня 2026",
+        "channel": "Телефон",
+        "status": "Нова заявка"
+      },
+      {
+        "id": "REQ-1038",
+        "propertyId": "podil-duplex-rent",
+        "client": "Олексій П.",
+        "date": "28 липня 2026",
+        "channel": "Telegram",
+        "status": "Уточнюється"
+      },
+      {
+        "id": "REQ-1029",
+        "propertyId": "obolon-terrace",
+        "client": "Ірина Д.",
+        "date": "22 липня 2026",
+        "channel": "Email",
+        "status": "Завершено"
+      }
+    ]
+  }
+}

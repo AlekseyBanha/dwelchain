@@ -1,0 +1,14 @@
+# Исключения для docker build context.
+# Не копируем в образ VCS, IDE, локальный .env и vendor
+# (vendor ставится внутри Dockerfile / composer install).
+
+.git
+.idea
+.gitignore
+.gitattributes
+.env
+.env.example
+.editorconfig
+vendor
+node_modules
+Dwelchain-frontend-prototype
