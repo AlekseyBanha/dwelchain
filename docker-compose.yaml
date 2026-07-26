@@ -2,12 +2,15 @@
 # docker-compose.yaml — базовый (prod-like) compose
 # ============================================================
 # Сервисы на текущем этапе:
-#   postgres — PostgreSQL 16
+#   postgres — PostGIS (PostgreSQL 16 + PostGIS)
 #   client   — Laravel-приложение на FrankenPHP (порт 80)
 #
 # Dev-оверрайды: docker-compose.dev.yaml
 # Запуск prod-like: docker compose up --build
 # Запуск dev:       docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build
+#
+# Важно: смена postgres → postgis требует пересоздания volume `postgres`,
+# если БД уже инициализирована образом без PostGIS.
 # ============================================================
 
 version: '3.11'
@@ -17,14 +20,15 @@ volumes:
 
 services:
   # ----------------------------------------------------------
-  # PostgreSQL
+  # PostGIS (PostgreSQL 16)
   # ----------------------------------------------------------
   # Данные в named volume `postgres`.
   # При первом старте выполняется init-db.sh:
   #   создаёт DB_DATABASE / DB_USERNAME / DB_PASSWORD из .env
+  #   включает uuid-ossp и postgis
   # ----------------------------------------------------------
   postgres:
-    image: postgres:16.0
+    image: postgis/postgis:16-3.4
     restart: always
     environment:
       POSTGRES_DB: postgres

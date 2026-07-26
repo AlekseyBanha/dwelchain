@@ -7,3 +7,4 @@
 # ============================================================
 
 php artisan migrate --force
+php artisan geo:import

@@ -24,4 +24,7 @@ psql -U "postgres" -c "GRANT ALL PRIVILEGES ON DATABASE $DB_DATABASE TO $DB_USER
 echo "Creating uuid-ossp extension"
 psql -U "postgres" -d "$DB_DATABASE" -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";"
 
+echo "Creating postgis extension"
+psql -U "postgres" -d "$DB_DATABASE" -c "CREATE EXTENSION IF NOT EXISTS \"postgis\";"
+
 echo "Finished running init-db.sh"

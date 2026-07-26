@@ -1,0 +1,1263 @@
+[
+  {
+    "id": 198,
+    "city_id": 1377,
+    "name": "Жовтневий",
+    "longitude": 36.16651,
+    "latitude": 49.9535,
+    "slug": "zhovtnevyy",
+    "ru": {
+      "name": "Октябрьский"
+    },
+    "langs_loct_ua": "Жовтневому",
+    "langs_loct_ru": "Октябрьском"
+  },
+  {
+    "id": 147,
+    "city_id": 313,
+    "name": "Замостянський",
+    "longitude": 28.519,
+    "latitude": 49.248,
+    "slug": "zamostyanskyy",
+    "ru": {
+      "name": "Замостянский"
+    },
+    "langs_loct_ua": "Замостянському",
+    "langs_loct_ru": "Замостянском"
+  },
+  {
+    "id": 149,
+    "city_id": 313,
+    "name": "Ленінський",
+    "longitude": 28.423,
+    "latitude": 49.227,
+    "slug": "leninskyy",
+    "ru": {
+      "name": "Ленинский"
+    },
+    "langs_loct_ua": "Ленінському",
+    "langs_loct_ru": "Ленинском"
+  },
+  {
+    "id": 151,
+    "city_id": 313,
+    "name": "Староміський",
+    "longitude": 28.474,
+    "latitude": 49.222,
+    "slug": "staromiskyy",
+    "ru": {
+      "name": "Старогородский"
+    },
+    "langs_loct_ua": "Староміському",
+    "langs_loct_ru": "Старогородском"
+  },
+  {
+    "id": 117,
+    "city_id": 121,
+    "name": "Індустріальний",
+    "longitude": 35.07339,
+    "latitude": 48.51431,
+    "slug": "industrialnyy",
+    "ru": {
+      "name": "Индустриальный"
+    },
+    "langs_loct_ua": "Індустріальному",
+    "langs_loct_ru": "Индустриальном"
+  },
+  {
+    "id": 111,
+    "city_id": 121,
+    "name": "Амур-Нижньодніпровський ",
+    "longitude": 34.97792,
+    "latitude": 48.55694,
+    "slug": "amur-nyzhnodniprovskyy",
+    "ru": {
+      "name": "Амур-Нижнеднепровский"
+    },
+    "langs_loct_ua": "Амурі-Нижньодніпровському ",
+    "langs_loct_ru": "Амуре-Нижнеднепровском"
+  },
+  {
+    "id": 123,
+    "city_id": 121,
+    "name": "Новокодацький",
+    "longitude": 34.87816,
+    "latitude": 48.45004,
+    "slug": "novokodatskyy",
+    "ru": {
+      "name": "Новокодакский"
+    },
+    "langs_loct_ua": "Новокодацькому",
+    "langs_loct_ru": "Новокодакском"
+  },
+  {
+    "id": 125,
+    "city_id": 121,
+    "name": "Самарський",
+    "longitude": 35.127,
+    "latitude": 48.456,
+    "slug": "samarskyy",
+    "ru": {
+      "name": "Самарский"
+    },
+    "langs_loct_ua": "Самарському",
+    "langs_loct_ru": "Самарском"
+  },
+  {
+    "id": 115,
+    "city_id": 121,
+    "name": "Соборний",
+    "longitude": 35.06179,
+    "latitude": 48.43928,
+    "slug": "sobornyy",
+    "ru": {
+      "name": "Соборный"
+    },
+    "langs_loct_ua": "Соборному",
+    "langs_loct_ru": "Соборном"
+  },
+  {
+    "id": 119,
+    "city_id": 121,
+    "name": "Центральний",
+    "longitude": 35.02387,
+    "latitude": 48.463,
+    "slug": "tsentralnyy",
+    "ru": {
+      "name": "Центральный"
+    },
+    "langs_loct_ua": "Центральному",
+    "langs_loct_ru": "Центральном"
+  },
+  {
+    "id": 121,
+    "city_id": 121,
+    "name": "Чечелівський",
+    "longitude": 34.96276,
+    "latitude": 48.42762,
+    "slug": "chechelivskyy",
+    "ru": {
+      "name": "Чечеловский"
+    },
+    "langs_loct_ua": "Чечелівському",
+    "langs_loct_ru": "Чечеловском"
+  },
+  {
+    "id": 113,
+    "city_id": 121,
+    "name": "Шевченківський",
+    "longitude": 35.013,
+    "latitude": 48.405,
+    "slug": "shevchenkivskyy",
+    "ru": {
+      "name": "Шевченковский"
+    },
+    "langs_loct_ua": "Шевченківському",
+    "langs_loct_ru": "Шевченковском"
+  },
+  {
+    "id": 99,
+    "city_id": 340,
+    "name": "Інгулецький",
+    "longitude": 33.308,
+    "latitude": 47.819,
+    "slug": "inguletskyy",
+    "ru": {
+      "name": "Ингулецкий"
+    },
+    "langs_loct_ua": "Інгулецькому",
+    "langs_loct_ru": "Ингулецком"
+  },
+  {
+    "id": 95,
+    "city_id": 340,
+    "name": "Долгинцевський",
+    "longitude": 33.371,
+    "latitude": 47.901,
+    "slug": "dolgyntsevskyy",
+    "ru": {
+      "name": "Долгинцевский"
+    },
+    "langs_loct_ua": "Долгинцевському",
+    "langs_loct_ru": "Долгинцевском"
+  },
+  {
+    "id": 93,
+    "city_id": 340,
+    "name": "Металургійний",
+    "longitude": 33.38348,
+    "latitude": 47.88284,
+    "slug": "metalurgiynyy",
+    "ru": {
+      "name": "Металлургический"
+    },
+    "langs_loct_ua": "Металургійному",
+    "langs_loct_ru": "Металлургическом"
+  },
+  {
+    "id": 97,
+    "city_id": 340,
+    "name": "Покровський",
+    "longitude": 33.392,
+    "latitude": 47.91,
+    "slug": "pokrovskyy",
+    "ru": {
+      "name": "Покровский"
+    },
+    "langs_loct_ua": "Покровському",
+    "langs_loct_ru": "Покровском"
+  },
+  {
+    "id": 101,
+    "city_id": 340,
+    "name": "Саксаганський",
+    "longitude": 33.409,
+    "latitude": 47.947,
+    "slug": "saksaganskyy",
+    "ru": {
+      "name": "Саксаганский"
+    },
+    "langs_loct_ua": "Саксаганському",
+    "langs_loct_ru": "Саксаганском"
+  },
+  {
+    "id": 103,
+    "city_id": 340,
+    "name": "Тернівський",
+    "longitude": 33.528,
+    "latitude": 48.103,
+    "slug": "ternivskyy",
+    "ru": {
+      "name": "Терновский"
+    },
+    "langs_loct_ua": "Тернівському",
+    "langs_loct_ru": "Терновском"
+  },
+  {
+    "id": 105,
+    "city_id": 340,
+    "name": "Центрально-Міський",
+    "longitude": 33.335,
+    "latitude": 47.899,
+    "slug": "tsentralno-miskyy",
+    "ru": {
+      "name": "Центрально-Городской"
+    },
+    "langs_loct_ua": "Центральні-Міському",
+    "langs_loct_ru": "Центральне-Городской"
+  },
+  {
+    "id": 21,
+    "city_id": 141,
+    "name": "Будьонівський",
+    "longitude": 37.866,
+    "latitude": 47.965,
+    "slug": "budonivskyy",
+    "ru": {
+      "name": "Будённовский"
+    },
+    "langs_loct_ua": "Будьонівському",
+    "langs_loct_ru": "Будённовском"
+  },
+  {
+    "id": 23,
+    "city_id": 141,
+    "name": "Ворошиловський",
+    "longitude": 37.808,
+    "latitude": 48.01,
+    "slug": "voroshylovskyy",
+    "ru": {
+      "name": "Ворошиловский"
+    },
+    "langs_loct_ua": "Ворошиловському",
+    "langs_loct_ru": "Ворошиловском"
+  },
+  {
+    "id": 29,
+    "city_id": 141,
+    "name": "Кіровський",
+    "longitude": 37.689,
+    "latitude": 47.981,
+    "slug": "kirovskyy",
+    "ru": {
+      "name": "Кировский"
+    },
+    "langs_loct_ua": "Кіровському",
+    "langs_loct_ru": "Кировском"
+  },
+  {
+    "id": 25,
+    "city_id": 141,
+    "name": "Калінінський",
+    "longitude": 37.846,
+    "latitude": 48.007,
+    "slug": "kalininskyy",
+    "ru": {
+      "name": "Калининский"
+    },
+    "langs_loct_ua": "Калінінському",
+    "langs_loct_ru": "Калининском"
+  },
+  {
+    "id": 27,
+    "city_id": 141,
+    "name": "Київський",
+    "longitude": 37.77209,
+    "latitude": 48.04379,
+    "slug": "kyyivskyy",
+    "ru": {
+      "name": "Киевский"
+    },
+    "langs_loct_ua": "Київському",
+    "langs_loct_ru": "Киевском"
+  },
+  {
+    "id": 31,
+    "city_id": 141,
+    "name": "Куйбишівський",
+    "longitude": 37.733,
+    "latitude": 48.01,
+    "slug": "kuybyshivskyy",
+    "ru": {
+      "name": "Куйбышевский"
+    },
+    "langs_loct_ua": "Куйбишівському",
+    "langs_loct_ru": "Куйбышевском"
+  },
+  {
+    "id": 33,
+    "city_id": 141,
+    "name": "Ленінський",
+    "longitude": 37.775,
+    "latitude": 47.961,
+    "slug": "leninskyy_187",
+    "ru": {
+      "name": "Ленинский"
+    },
+    "langs_loct_ua": "Ленінському",
+    "langs_loct_ru": "Ленинском"
+  },
+  {
+    "id": 35,
+    "city_id": 141,
+    "name": "Петровський",
+    "longitude": 37.621,
+    "latitude": 47.938,
+    "slug": "petrovskyy",
+    "ru": {
+      "name": "Петровский"
+    },
+    "langs_loct_ua": "Петровському",
+    "langs_loct_ru": "Петровском"
+  },
+  {
+    "id": 37,
+    "city_id": 141,
+    "name": "Пролетарський",
+    "longitude": 37.942,
+    "latitude": 47.952,
+    "slug": "proletarskyy",
+    "ru": {
+      "name": "Пролетарский"
+    },
+    "langs_loct_ua": "Пролетарському",
+    "langs_loct_ru": "Пролетарском"
+  },
+  {
+    "id": 153,
+    "city_id": 324,
+    "name": "Аеропорт",
+    "longitude": 28.74241,
+    "latitude": 50.27788,
+    "slug": "aeroport",
+    "ru": {
+      "name": "Аэропорт"
+    },
+    "langs_loct_ua": "Аеропорті",
+    "langs_loct_ru": "Аэропорте"
+  },
+  {
+    "id": 61,
+    "city_id": 324,
+    "name": "Богунський",
+    "longitude": 28.64647,
+    "latitude": 50.27542,
+    "slug": "bogunskyy",
+    "ru": {
+      "name": "Богунский"
+    },
+    "langs_loct_ua": "Богунському",
+    "langs_loct_ru": "Богунском"
+  },
+  {
+    "id": 156,
+    "city_id": 324,
+    "name": "Вокзал",
+    "longitude": 28.69376,
+    "latitude": 50.26916,
+    "slug": "vokzal",
+    "ru": {
+      "name": "Вокзал"
+    },
+    "langs_loct_ua": "Вокзалі",
+    "langs_loct_ru": "Вокзале"
+  },
+  {
+    "id": 160,
+    "city_id": 324,
+    "name": "Житній ринок",
+    "longitude": 28.67075,
+    "latitude": 50.25671,
+    "slug": "zhytniy-rynok",
+    "ru": {
+      "name": "Житний рынок"
+    },
+    "langs_loct_ua": "Житному риноці",
+    "langs_loct_ru": "Житнем рынке"
+  },
+  {
+    "id": 166,
+    "city_id": 324,
+    "name": "Корбутовка",
+    "longitude": 28.63058,
+    "latitude": 50.24524,
+    "slug": "korbutovka",
+    "ru": {
+      "name": "Корбутовка"
+    },
+    "langs_loct_ua": "Корбутовці",
+    "langs_loct_ru": "Корбутовке"
+  },
+  {
+    "id": 63,
+    "city_id": 324,
+    "name": "Крошня",
+    "longitude": 28.65575,
+    "latitude": 50.28216,
+    "slug": "kroshnya",
+    "ru": {
+      "name": "Крошня"
+    },
+    "langs_loct_ua": "Крошні",
+    "langs_loct_ru": "Крошне"
+  },
+  {
+    "id": 158,
+    "city_id": 324,
+    "name": "Міськмолзавод",
+    "longitude": 28.6699,
+    "latitude": 50.27958,
+    "slug": "miskmolzavod",
+    "ru": {
+      "name": "Гормолзавод"
+    },
+    "langs_loct_ua": "Міськмолзаводі",
+    "langs_loct_ru": "Гормолзаводе"
+  },
+  {
+    "id": 168,
+    "city_id": 324,
+    "name": "Максютова",
+    "longitude": 28.63093,
+    "latitude": 50.28715,
+    "slug": "maksyutova",
+    "ru": {
+      "name": "Максютова"
+    },
+    "langs_loct_ua": "Максютові",
+    "langs_loct_ru": "Максютове"
+  },
+  {
+    "id": 170,
+    "city_id": 324,
+    "name": "Малікова",
+    "longitude": 28.63445,
+    "latitude": 50.27207,
+    "slug": "malikova",
+    "ru": {
+      "name": "Маликова"
+    },
+    "langs_loct_ua": "Малікові",
+    "langs_loct_ru": "Маликове"
+  },
+  {
+    "id": 65,
+    "city_id": 324,
+    "name": "Мальованка",
+    "longitude": 28.63617,
+    "latitude": 50.26477,
+    "slug": "malovanka",
+    "ru": {
+      "name": "Малеванка"
+    },
+    "langs_loct_ua": "Мальованці",
+    "langs_loct_ru": "Малеванке"
+  },
+  {
+    "id": 172,
+    "city_id": 324,
+    "name": "Мар'янівка",
+    "longitude": 28.71333,
+    "latitude": 50.28595,
+    "slug": "maryanivka",
+    "ru": {
+      "name": "Марьяновка"
+    },
+    "langs_loct_ua": "Мар'янівці",
+    "langs_loct_ru": "Марьяновке"
+  },
+  {
+    "id": 174,
+    "city_id": 324,
+    "name": "Музична фабрика",
+    "longitude": 28.6856,
+    "latitude": 50.24474,
+    "slug": "muzychna-fabryka",
+    "ru": {
+      "name": "Музыкальная фабрика"
+    },
+    "langs_loct_ua": "Музичній фабриці",
+    "langs_loct_ru": "Музыкальной фабрике"
+  },
+  {
+    "id": 196,
+    "city_id": 324,
+    "name": "Панчішна фабрика",
+    "longitude": 28.63187,
+    "latitude": 50.2792,
+    "slug": "panchishna-fabryka",
+    "ru": {
+      "name": "Чулочная фабрика"
+    },
+    "langs_loct_ua": "Панчішній фабриці",
+    "langs_loct_ru": "Чулочной фабрике"
+  },
+  {
+    "id": 154,
+    "city_id": 324,
+    "name": "Паперова фабрика",
+    "longitude": 28.71727,
+    "latitude": 50.23832,
+    "slug": "paperova-fabryka",
+    "ru": {
+      "name": "Бумажная фабрика"
+    },
+    "langs_loct_ua": "Паперові фабриці",
+    "langs_loct_ru": "Бумажной фабрике"
+  },
+  {
+    "id": 176,
+    "city_id": 324,
+    "name": "Поділ",
+    "longitude": 28.65385,
+    "latitude": 50.25396,
+    "slug": "podil",
+    "ru": {
+      "name": "Подол"
+    },
+    "langs_loct_ua": "Поділі",
+    "langs_loct_ru": "Подоле"
+  },
+  {
+    "id": 178,
+    "city_id": 324,
+    "name": "Польова",
+    "longitude": 28.70715,
+    "latitude": 50.24908,
+    "slug": "polova",
+    "ru": {
+      "name": "Полевая"
+    },
+    "langs_loct_ua": "Польові",
+    "langs_loct_ru": "Полевой"
+  },
+  {
+    "id": 180,
+    "city_id": 324,
+    "name": "Промавтоматика",
+    "longitude": 28.71693,
+    "latitude": 50.26499,
+    "slug": "promavtomatyka",
+    "ru": {
+      "name": "Промавтоматика"
+    },
+    "langs_loct_ua": "Промавтоматиці",
+    "langs_loct_ru": "Промавтоматике"
+  },
+  {
+    "id": 182,
+    "city_id": 324,
+    "name": "Путятинка",
+    "longitude": 28.68277,
+    "latitude": 50.26609,
+    "slug": "putyatynka",
+    "ru": {
+      "name": "Путятинка"
+    },
+    "langs_loct_ua": "Путятинці",
+    "langs_loct_ru": "Путятинке"
+  },
+  {
+    "id": 184,
+    "city_id": 324,
+    "name": "Сенний ринок",
+    "longitude": 28.66131,
+    "latitude": 50.26922,
+    "slug": "sennyy-rynok",
+    "ru": {
+      "name": "Сенный рынок"
+    },
+    "langs_loct_ua": "Сенному риноці",
+    "langs_loct_ru": "Сенном рынке"
+  },
+  {
+    "id": 186,
+    "city_id": 324,
+    "name": "Смаківка",
+    "longitude": 28.7262,
+    "latitude": 50.28628,
+    "slug": "smakivka",
+    "ru": {
+      "name": "Смаковка"
+    },
+    "langs_loct_ua": "Смаківці",
+    "langs_loct_ru": "Смаковке"
+  },
+  {
+    "id": 188,
+    "city_id": 324,
+    "name": "Смолянка",
+    "longitude": 28.70818,
+    "latitude": 50.23074,
+    "slug": "smolyanka",
+    "ru": {
+      "name": "Смолянка"
+    },
+    "langs_loct_ua": "Смолянці",
+    "langs_loct_ru": "Смолянке"
+  },
+  {
+    "id": 190,
+    "city_id": 324,
+    "name": "Хімволокно",
+    "longitude": 28.72723,
+    "latitude": 50.25007,
+    "slug": "khimvolokno",
+    "ru": {
+      "name": "Химволокно"
+    },
+    "langs_loct_ua": "Хімволокні",
+    "langs_loct_ru": "Химволокне"
+  },
+  {
+    "id": 194,
+    "city_id": 324,
+    "name": "Центр",
+    "longitude": 28.66663,
+    "latitude": 50.25512,
+    "slug": "tsentr",
+    "ru": {
+      "name": "Центр"
+    },
+    "langs_loct_ua": "Центрі",
+    "langs_loct_ru": "Центре"
+  },
+  {
+    "id": 47,
+    "city_id": 194,
+    "name": "Вознесенівський",
+    "longitude": 35.09867,
+    "latitude": 47.82732,
+    "slug": "voznesenivskyy",
+    "ru": {
+      "name": "Вознесеновский"
+    },
+    "langs_loct_ua": "Вознесенівському",
+    "langs_loct_ru": "Вознесеновском"
+  },
+  {
+    "id": 45,
+    "city_id": 194,
+    "name": "Дніпровський",
+    "longitude": 35.05824,
+    "latitude": 47.878,
+    "slug": "dniprovskyy",
+    "ru": {
+      "name": "Днепровский"
+    },
+    "langs_loct_ua": "Дніпровському",
+    "langs_loct_ru": "Днепровском"
+  },
+  {
+    "id": 41,
+    "city_id": 194,
+    "name": "Заводський",
+    "longitude": 35.195,
+    "latitude": 47.894,
+    "slug": "zavodskyy",
+    "ru": {
+      "name": "Заводский"
+    },
+    "langs_loct_ua": "Заводському",
+    "langs_loct_ru": "Заводском"
+  },
+  {
+    "id": 43,
+    "city_id": 194,
+    "name": "Комунарський",
+    "longitude": 35.186,
+    "latitude": 47.777,
+    "slug": "komunarskyy",
+    "ru": {
+      "name": "Коммунарский"
+    },
+    "langs_loct_ua": "Комунарському",
+    "langs_loct_ru": "Коммунарском"
+  },
+  {
+    "id": 39,
+    "city_id": 194,
+    "name": "Олександрiвський",
+    "longitude": 35.166,
+    "latitude": 47.822,
+    "slug": "oleksandrivskyy",
+    "ru": {
+      "name": "Александровский"
+    },
+    "langs_loct_ua": "Олександрiвському",
+    "langs_loct_ru": "Александровском"
+  },
+  {
+    "id": 49,
+    "city_id": 194,
+    "name": "Хортицький",
+    "longitude": 35.052,
+    "latitude": 47.815,
+    "slug": "khortytskyy",
+    "ru": {
+      "name": "Хортицкий"
+    },
+    "langs_loct_ua": "Хортицькому",
+    "langs_loct_ru": "Хортицком"
+  },
+  {
+    "id": 51,
+    "city_id": 194,
+    "name": "Шевченківський",
+    "longitude": 35.199,
+    "latitude": 47.831,
+    "slug": "shevchenkivskyy_110",
+    "ru": {
+      "name": "Шевченковский"
+    },
+    "langs_loct_ua": "Шевченківському",
+    "langs_loct_ru": "Шевченковском"
+  },
+  {
+    "id": 109,
+    "city_id": 69,
+    "name": "Подільський",
+    "longitude": 32.29581,
+    "latitude": 48.49354,
+    "slug": "podilskyy",
+    "ru": {
+      "name": "Подольский"
+    },
+    "langs_loct_ua": "Подільському",
+    "langs_loct_ru": "Подольском"
+  },
+  {
+    "id": 107,
+    "city_id": 69,
+    "name": "Фортечний",
+    "longitude": 32.22902,
+    "latitude": 48.5205,
+    "slug": "fortechnyy",
+    "ru": {
+      "name": "Фортечный"
+    },
+    "langs_loct_ua": "Фортечному",
+    "langs_loct_ru": "Фортечном"
+  },
+  {
+    "id": 1,
+    "city_id": 268,
+    "name": "Голосіївський",
+    "longitude": 30.51985,
+    "latitude": 50.35684,
+    "slug": "golosiyivskyy",
+    "ru": {
+      "name": "Голосеевский"
+    },
+    "langs_loct_ua": "Голосіївському",
+    "langs_loct_ru": "Голосеевском"
+  },
+  {
+    "id": 3,
+    "city_id": 268,
+    "name": "Дарницький",
+    "longitude": 30.69263,
+    "latitude": 50.40931,
+    "slug": "darnytskyy",
+    "ru": {
+      "name": "Дарницкий"
+    },
+    "langs_loct_ua": "Дарницькому",
+    "langs_loct_ru": "Дарницком"
+  },
+  {
+    "id": 5,
+    "city_id": 268,
+    "name": "Деснянський",
+    "longitude": 30.62532,
+    "latitude": 50.5186,
+    "slug": "desnyanskyy",
+    "ru": {
+      "name": "Деснянский"
+    },
+    "langs_loct_ua": "Деснянському",
+    "langs_loct_ru": "Деснянском"
+  },
+  {
+    "id": 7,
+    "city_id": 268,
+    "name": "Дніпровський",
+    "longitude": 30.61717,
+    "latitude": 50.45964,
+    "slug": "dniprovskyy_243",
+    "ru": {
+      "name": "Днепровский"
+    },
+    "langs_loct_ua": "Дніпровському",
+    "langs_loct_ru": "Днепровском"
+  },
+  {
+    "id": 9,
+    "city_id": 268,
+    "name": "Оболонський",
+    "longitude": 30.50243,
+    "latitude": 50.51015,
+    "slug": "obolonskyy",
+    "ru": {
+      "name": "Оболонский"
+    },
+    "langs_loct_ua": "Оболонському",
+    "langs_loct_ru": "Оболонском"
+  },
+  {
+    "id": 11,
+    "city_id": 268,
+    "name": "Печерський",
+    "longitude": 30.54521,
+    "latitude": 50.41847,
+    "slug": "pecherskyy",
+    "ru": {
+      "name": "Печерский"
+    },
+    "langs_loct_ua": "Печерському",
+    "langs_loct_ru": "Печерском"
+  },
+  {
+    "id": 13,
+    "city_id": 268,
+    "name": "Подільський",
+    "longitude": 30.43854,
+    "latitude": 50.49575,
+    "slug": "podilskyy_111",
+    "ru": {
+      "name": "Подольский"
+    },
+    "langs_loct_ua": "Подільському",
+    "langs_loct_ru": "Подольском"
+  },
+  {
+    "id": 15,
+    "city_id": 268,
+    "name": "Святошинський",
+    "longitude": 30.34653,
+    "latitude": 50.45612,
+    "slug": "svyatoshynskyy",
+    "ru": {
+      "name": "Святошинский"
+    },
+    "langs_loct_ua": "Святошинському",
+    "langs_loct_ru": "Святошинском"
+  },
+  {
+    "id": 17,
+    "city_id": 268,
+    "name": "Солом'янський",
+    "longitude": 30.44339,
+    "latitude": 50.41313,
+    "slug": "solomyanskyy",
+    "ru": {
+      "name": "Соломенский"
+    },
+    "langs_loct_ua": "Солом'янському",
+    "langs_loct_ru": "Соломенском"
+  },
+  {
+    "id": 19,
+    "city_id": 268,
+    "name": "Шевченківський",
+    "longitude": 30.4624,
+    "latitude": 50.47135,
+    "slug": "shevchenkivskyy_195",
+    "ru": {
+      "name": "Шевченковский"
+    },
+    "langs_loct_ua": "Шевченківському",
+    "langs_loct_ru": "Шевченковском"
+  },
+  {
+    "id": 55,
+    "city_id": 152,
+    "name": "Артемівський",
+    "longitude": 39.284,
+    "latitude": 48.573,
+    "slug": "artemivskyy",
+    "ru": {
+      "name": "Артёмовский"
+    },
+    "langs_loct_ua": "Артемівському",
+    "langs_loct_ru": "Артёмовском"
+  },
+  {
+    "id": 53,
+    "city_id": 152,
+    "name": "Жовтневий",
+    "longitude": 39.308,
+    "latitude": 48.574,
+    "slug": "zhovtnevyy_164",
+    "ru": {
+      "name": "Жовтневый"
+    },
+    "langs_loct_ua": "Жовтневому",
+    "langs_loct_ru": "Жовтневом"
+  },
+  {
+    "id": 59,
+    "city_id": 152,
+    "name": "Кам'янобрідський",
+    "longitude": 39.303,
+    "latitude": 48.59,
+    "slug": "kamyanobridskyy",
+    "ru": {
+      "name": "Каменнобродский"
+    },
+    "langs_loct_ua": "Кам'янобрідському",
+    "langs_loct_ru": "Каменнобродском"
+  },
+  {
+    "id": 57,
+    "city_id": 152,
+    "name": "Ленінський",
+    "longitude": 39.363,
+    "latitude": 48.509,
+    "slug": "leninskyy_943",
+    "ru": {
+      "name": "Ленинский"
+    },
+    "langs_loct_ua": "Ленінському",
+    "langs_loct_ru": "Ленинском"
+  },
+  {
+    "id": 127,
+    "city_id": 176,
+    "name": "Галицький",
+    "longitude": 24.03517,
+    "latitude": 49.83524,
+    "slug": "galytskyy",
+    "ru": {
+      "name": "Галицкий"
+    },
+    "langs_loct_ua": "Галицькому",
+    "langs_loct_ru": "Галицком"
+  },
+  {
+    "id": 129,
+    "city_id": 176,
+    "name": "Залізничний",
+    "longitude": 23.996,
+    "latitude": 49.839,
+    "slug": "zaliznychnyy",
+    "ru": {
+      "name": "Железнодорожный"
+    },
+    "langs_loct_ua": "Залізничному",
+    "langs_loct_ru": "Железнодорожном"
+  },
+  {
+    "id": 131,
+    "city_id": 176,
+    "name": "Личаківський",
+    "longitude": 24.068,
+    "latitude": 49.848,
+    "slug": "lychakivskyy",
+    "ru": {
+      "name": "Лычаковский"
+    },
+    "langs_loct_ua": "Личаківському",
+    "langs_loct_ru": "Лычаковском"
+  },
+  {
+    "id": 133,
+    "city_id": 176,
+    "name": "Сихівський",
+    "longitude": 24.064,
+    "latitude": 49.792,
+    "slug": "sykhivskyy",
+    "ru": {
+      "name": "Сиховский"
+    },
+    "langs_loct_ua": "Сихівському",
+    "langs_loct_ru": "Сиховском"
+  },
+  {
+    "id": 135,
+    "city_id": 176,
+    "name": "Франківський",
+    "longitude": 23.995,
+    "latitude": 49.839,
+    "slug": "frankivskyy",
+    "ru": {
+      "name": "Франковский"
+    },
+    "langs_loct_ua": "Франківському",
+    "langs_loct_ru": "Франковском"
+  },
+  {
+    "id": 137,
+    "city_id": 176,
+    "name": "Шевченківський",
+    "longitude": 23.995,
+    "latitude": 49.839,
+    "slug": "shevchenkivskyy_141",
+    "ru": {
+      "name": "Шевченковский"
+    },
+    "langs_loct_ua": "Шевченківському",
+    "langs_loct_ru": "Шевченковском"
+  },
+  {
+    "id": 143,
+    "city_id": 106,
+    "name": "Iнгульський",
+    "longitude": 32.069,
+    "latitude": 46.946,
+    "slug": "ingulskyy",
+    "ru": {
+      "name": "Ингульский"
+    },
+    "langs_loct_ua": "Iнгульському",
+    "langs_loct_ru": "Ингульском"
+  },
+  {
+    "id": 139,
+    "city_id": 106,
+    "name": "Заводський",
+    "longitude": 31.951,
+    "latitude": 46.94,
+    "slug": "zavodskyy_997",
+    "ru": {
+      "name": "Заводский"
+    },
+    "langs_loct_ua": "Заводському",
+    "langs_loct_ru": "Заводском"
+  },
+  {
+    "id": 141,
+    "city_id": 106,
+    "name": "Корабельний",
+    "longitude": 32.03745,
+    "latitude": 46.88011,
+    "slug": "korabelnyy",
+    "ru": {
+      "name": "Корабельный"
+    },
+    "langs_loct_ua": "Корабельному",
+    "langs_loct_ru": "Корабельном"
+  },
+  {
+    "id": 145,
+    "city_id": 106,
+    "name": "Центральний",
+    "longitude": 31.952,
+    "latitude": 47.015,
+    "slug": "tsentralnyy_572",
+    "ru": {
+      "name": "Центральный"
+    },
+    "langs_loct_ua": "Центральному",
+    "langs_loct_ru": "Центральном"
+  },
+  {
+    "id": 85,
+    "city_id": 62,
+    "name": "Київський",
+    "longitude": 30.70913,
+    "latitude": 46.38471,
+    "slug": "kyyivskyy_619",
+    "ru": {
+      "name": "Киевский"
+    },
+    "langs_loct_ua": "Київському",
+    "langs_loct_ru": "Киевском"
+  },
+  {
+    "id": 91,
+    "city_id": 62,
+    "name": "Пересипський",
+    "longitude": 30.73505,
+    "latitude": 46.54131,
+    "slug": "peresypskyy",
+    "ru": {
+      "name": "Пересыпский"
+    },
+    "langs_loct_ua": "Пересипському",
+    "langs_loct_ru": "Пересыпском"
+  },
+  {
+    "id": 89,
+    "city_id": 62,
+    "name": "Приморський",
+    "longitude": 30.745,
+    "latitude": 46.467,
+    "slug": "prymorskyy",
+    "ru": {
+      "name": "Приморский"
+    },
+    "langs_loct_ua": "Приморському",
+    "langs_loct_ru": "Приморском"
+  },
+  {
+    "id": 87,
+    "city_id": 62,
+    "name": "Хаджибейський",
+    "longitude": 30.67813,
+    "latitude": 46.46309,
+    "slug": "khadzhybeyskyy",
+    "ru": {
+      "name": "Хаджибейский"
+    },
+    "langs_loct_ua": "Хаджибейському",
+    "langs_loct_ru": "Хаджибейском"
+  },
+  {
+    "id": 79,
+    "city_id": 280,
+    "name": "Індустріальний",
+    "longitude": 36.401,
+    "latitude": 49.933,
+    "slug": "industrialnyy_901",
+    "ru": {
+      "name": "Индустриальный "
+    },
+    "langs_loct_ua": "Індустріальному",
+    "langs_loct_ru": "Индустриальном "
+  },
+  {
+    "id": 69,
+    "city_id": 280,
+    "name": "Київський",
+    "longitude": 36.3,
+    "latitude": 50.04,
+    "slug": "kyyivskyy_119",
+    "ru": {
+      "name": "Киевский"
+    },
+    "langs_loct_ua": "Київському",
+    "langs_loct_ru": "Киевском"
+  },
+  {
+    "id": 81,
+    "city_id": 280,
+    "name": "Немишлянський",
+    "longitude": 36.33448,
+    "latitude": 49.96659,
+    "slug": "nemyshlyanskyy",
+    "ru": {
+      "name": "Немышлянский"
+    },
+    "langs_loct_ua": "Немишлянському",
+    "langs_loct_ru": "Немышлянском"
+  },
+  {
+    "id": 77,
+    "city_id": 280,
+    "name": "Новобаварський ",
+    "longitude": 36.15974,
+    "latitude": 49.94667,
+    "slug": "novobavarskyy",
+    "ru": {
+      "name": "Новобаварский"
+    },
+    "langs_loct_ua": "Новобаварському ",
+    "langs_loct_ru": "Новобаварском"
+  },
+  {
+    "id": 83,
+    "city_id": 280,
+    "name": "Основ'янський",
+    "longitude": 36.22,
+    "latitude": 49.928,
+    "slug": "osnovyanskyy",
+    "ru": {
+      "name": "Основянский"
+    },
+    "langs_loct_ua": "Основ'янському",
+    "langs_loct_ru": "Основянском"
+  },
+  {
+    "id": 75,
+    "city_id": 280,
+    "name": "Салтівський",
+    "longitude": 36.343,
+    "latitude": 49.962,
+    "slug": "saltivskyy",
+    "ru": {
+      "name": "Салтовский"
+    },
+    "langs_loct_ua": "Салтівському",
+    "langs_loct_ru": "Салтовском"
+  },
+  {
+    "id": 71,
+    "city_id": 280,
+    "name": "Слобідський",
+    "longitude": 36.28963,
+    "latitude": 49.93914,
+    "slug": "slobidskyy",
+    "ru": {
+      "name": "Слободской"
+    },
+    "langs_loct_ua": "Слобідському",
+    "langs_loct_ru": "Слободской"
+  },
+  {
+    "id": 73,
+    "city_id": 280,
+    "name": "Холодногірський",
+    "longitude": 36.165,
+    "latitude": 50,
+    "slug": "kholodnogirskyy",
+    "ru": {
+      "name": "Холодногорский"
+    },
+    "langs_loct_ua": "Холодногірському",
+    "langs_loct_ru": "Холодногорском"
+  },
+  {
+    "id": 67,
+    "city_id": 280,
+    "name": "Шевченківський ",
+    "longitude": 36.221,
+    "latitude": 50.045,
+    "slug": "shevchenkivskyy_735",
+    "ru": {
+      "name": "Шевченковский"
+    },
+    "langs_loct_ua": "Шевченківському ",
+    "langs_loct_ru": "Шевченковском"
+  }
+]

@@ -7,7 +7,7 @@
 # Отличия от prod:
 #   - target php-franken-dev (без запекания кода в образ)
 #   - volume ./:/app — live-reload исходников
-#   - postgres проброшен на localhost:5432
+#   - postgres (PostGIS) проброшен на localhost:5432
 #   - client: APP_ENV/APP_DEBUG из .env, SYS_PTRACE для отладки
 # ============================================================
 
