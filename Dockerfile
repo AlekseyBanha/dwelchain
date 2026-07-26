@@ -64,3 +64,7 @@ ENV GOMAXPROCS=5
 COPY . /app
 RUN /usr/local/bin/composer install --prefer-dist --no-dev -o
 RUN rm /usr/local/bin/composer
+
+COPY ./docker-files/php/docker-entrypoint.sh /usr/local/bin/app-entrypoint.sh
+RUN chmod +x /usr/local/bin/app-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/app-entrypoint.sh"]
