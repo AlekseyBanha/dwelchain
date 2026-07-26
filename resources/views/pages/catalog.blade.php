@@ -6,7 +6,8 @@
   <meta name="description" content="Каталог квартир і будинків у Києві з пошуком за ціною, площею, поверхом, станом, комплектацією та типом будинку.">
   <title>Каталог нерухомості в Києві | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260725-accounts1">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  @include('partials.boot')
 </head>
 <body data-page="catalog">
   <div data-site-header></div>
@@ -30,8 +31,8 @@
           <button class="button button--primary catalog-filter__submit" type="submit">Показати об’єкти <span aria-hidden="true">→</span></button>
         </div>
         <div class="catalog-filter__advanced" id="catalog-advanced-filters" hidden>
-          <label class="field field--compact"><span>Площа від, м²</span><input name="minArea" type="number" min="0" step="1" placeholder="Від" aria-describedby="filter-error"></label>
-          <label class="field field--compact"><span>Площа до, м²</span><input name="maxArea" type="number" min="0" step="1" placeholder="До" aria-describedby="filter-error"></label>
+          <label class="field field--compact"><span>Площа від, м?</span><input name="minArea" type="number" min="0" step="1" placeholder="Від" aria-describedby="filter-error"></label>
+          <label class="field field--compact"><span>Площа до, м?</span><input name="maxArea" type="number" min="0" step="1" placeholder="До" aria-describedby="filter-error"></label>
           <label class="field field--compact"><span>Поверх</span><select name="floor"><option value="">Будь-який</option><option value="1">1</option><option value="2-5">2–5</option><option value="6-10">6–10</option><option value="11+">11+</option><option value="last">Останній</option></select></label>
           <label class="field field--compact"><span>Поверховість</span><select name="totalFloors"><option value="">Будь-яка</option><option value="1-5">До 5</option><option value="6-9">6–9</option><option value="10-16">10–16</option><option value="17+">17+</option></select></label>
           <label class="field field--compact"><span>Меблі</span><select name="furnished"><option value="">Неважливо</option><option value="yes">Є</option><option value="no">Без меблів</option></select></label>
@@ -59,14 +60,14 @@
       </div>
       <div class="catalog-loading" id="catalog-loading" role="status" aria-live="polite"><span class="sr-only">Завантажуємо об’єкти…</span><div></div><div></div><div></div></div>
       <div class="property-grid" id="catalog-grid" hidden></div>
-      <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">◇</span><h2>За цими параметрами нічого не знайдено</h2><p>Змініть параметри пошуку або очистьте фільтри.</p><button class="button button--secondary" id="reset-empty" type="button">Очистити фільтри</button></div>
+      <div class="empty-state" id="empty-state" hidden><span aria-hidden="true">⌕</span><h2>За цими параметрами нічого не знайдено</h2><p>Змініть параметри пошуку або очистьте фільтри.</p><button class="button button--secondary" id="reset-empty" type="button">Очистити фільтри</button></div>
       <div class="empty-state error-state" id="error-state" role="alert" hidden><span aria-hidden="true">!</span><h2>Не вдалося завантажити об’єкти</h2><p>Оновіть сторінку або спробуйте ще раз.</p><button class="button button--secondary" id="retry-catalog" type="button">Спробувати ще раз</button></div>
       <div class="load-more-wrap" id="load-more-wrap" hidden><button class="button button--secondary" id="load-more" type="button">Показати ще</button></div>
     </section>
 
-    <section class="section section-shell compact-cta"><div><p class="eyebrow eyebrow--gold"><span></span> Маєте нерухомість?</p><h2>Запропонуйте об’єкт для розміщення в Dwelchain</h2></div><button class="button button--light" type="button" data-modal-open="owner-modal">Запропонувати об’єкт <span aria-hidden="true">→</span></button></section>
+    <section class="section section-shell compact-cta"><div><p class="eyebrow eyebrow--gold"><span></span> Маєте нерухомість?</p><h2>Запропонуйте об’єкт для розміщення в Dwelchain</h2></div><button class="button button--light" type="button" data-account-offer>Запропонувати об’єкт <span aria-hidden="true">→</span></button></section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260725-investors1"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260726-selects3"></script>
 </body>
 </html>

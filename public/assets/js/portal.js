@@ -1,5 +1,6 @@
-import { initDialogs, mountChrome, renderPropertyCard } from './components.js?v=20260725-investors1';
+import { initDialogs, mountChrome, renderPropertyCard } from './components.js?v=20260726-selects3';
 import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260725-accounts1';
+import { initAuthPage, logout } from './auth.js?v=20260726-selects3';
 
 mountChrome();
 initDialogs();
@@ -63,37 +64,6 @@ function bindPortalForm(form, successContent) {
   });
 }
 
-function renderAuth() {
-  const root = document.getElementById('auth-root');
-  const mode = ['login', 'register', 'recover'].includes(params.get('mode')) ? params.get('mode') : 'login';
-  const titles = {
-    login: ['Вхід до кабінету', 'Увійдіть, щоб переглянути персональний простір Dwelchain.'],
-    register: ['Створити кабінет', 'Оберіть роль і заповніть основні контактні дані.'],
-    recover: ['Відновити доступ', 'Вкажіть email, який буде пов’язаний із вашим кабінетом.']
-  };
-  setMeta(titles[mode][0], `${titles[mode][1]} Демонстраційний frontend без реальної авторизації.`);
-  const authNav = `<nav class="auth-tabs" aria-label="Вхід і реєстрація"><a class="${mode === 'login' ? 'is-active' : ''}" href="/auth?mode=login" ${mode === 'login' ? 'aria-current="page"' : ''}>Вхід</a><a class="${mode === 'register' ? 'is-active' : ''}" href="/auth?mode=register" ${mode === 'register' ? 'aria-current="page"' : ''}>Реєстрація</a></nav>`;
-  let content = '';
-  if (mode === 'login') {
-    content = `<p class="eyebrow"><span></span> Особистий кабінет</p><h2>Увійти</h2><p class="auth-card__lead">Введіть дані та оберіть свою роль.</p><form class="portal-form" data-portal-form novalidate><fieldset class="role-picker"><legend>Увійти як</legend><label><input type="radio" name="role" value="tenant" checked><span><b>Орендар</b><small>Шукаю житло та планую перегляди</small></span></label><label><input type="radio" name="role" value="landlord"><span><b>Орендодавець</b><small>Керую власними об’єктами</small></span></label></fieldset>${field('Email', '<input name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="auth-email-error" required>', 'auth-email')}${field('Пароль', '<input name="password" type="password" autocomplete="current-password" placeholder="Щонайменше 8 символів" aria-describedby="auth-password-error" required>', 'auth-password')}<div class="auth-form__meta"><label class="checkbox-field"><input type="checkbox" name="remember"><span>Запам’ятати мене</span></label><a href="/auth?mode=recover">Забули пароль?</a></div><p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Увійти</button></form>`;
-  }
-  if (mode === 'register') {
-    content = `<p class="eyebrow"><span></span> Новий користувач</p><h2>Створити кабінет</h2><p class="auth-card__lead">Спочатку оберіть, як ви плануєте користуватися платформою.</p><form class="portal-form" data-portal-form novalidate><fieldset class="role-picker"><legend>Оберіть роль</legend><label><input type="radio" name="role" value="tenant" checked><span><b>Орендар</b><small>Шукаю житло та планую перегляди</small></span></label><label><input type="radio" name="role" value="landlord"><span><b>Орендодавець</b><small>Розміщую та контролюю власні об’єкти</small></span></label></fieldset><div class="form-grid">${field('Ім’я та прізвище', '<input name="name" autocomplete="name" aria-describedby="register-name-error" required>', 'register-name')}${field('Телефон', '<input name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" aria-describedby="register-phone-error" required>', 'register-phone')}${field('Email', '<input name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="register-email-error" required>', 'register-email')}${field('Місто', '<select name="city" aria-describedby="register-city-error" required><option value="Київ">Київ</option></select>', 'register-city')}${field('Пароль', '<input name="password" type="password" autocomplete="new-password" placeholder="Щонайменше 8 символів" aria-describedby="register-password-error" required>', 'register-password')}${field('Повторіть пароль', '<input name="passwordConfirm" type="password" autocomplete="new-password" aria-describedby="register-password-confirm-error" required>', 'register-password-confirm')}</div><p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Створити кабінет</button></form>`;
-  }
-  if (mode === 'recover') {
-    content = `<a class="auth-back" href="/auth?mode=login">← Повернутися до входу</a><p class="eyebrow"><span></span> Відновлення доступу</p><h2>Відновити пароль</h2><p class="auth-card__lead">У робочій версії на цей email буде надіслано інструкцію.</p><form class="portal-form" data-portal-form novalidate>${field('Email', '<input name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="recover-email-error" required>', 'recover-email')}<p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Отримати інструкцію</button></form>`;
-  }
-  root.innerHTML = `${authNav}${content}`;
-  const form = root.querySelector('[data-portal-form]');
-  bindPortalForm(form, currentForm => {
-    if (mode === 'recover') return '<strong>Форму заповнено.</strong><span>У цій версії прототипу лист не надсилається.</span>';
-    const role = new FormData(currentForm).get('role') === 'landlord' ? 'landlord' : 'tenant';
-    const label = role === 'landlord' ? 'орендодавця' : 'орендаря';
-    window.location.assign(`/account?role=${role}`);
-    return `<strong>Відкриваємо кабінет ${label}…</strong>`;
-  });
-}
-
 async function loadAccounts() {
   return fetch(new URL('../data/accounts.json', import.meta.url), { cache: 'no-store' })
     .then(response => {
@@ -116,11 +86,26 @@ function statusBadge(status) {
   return `<span class="account-status ${statusClass(status)}">${status}</span>`;
 }
 
+const accountNavIcons = {
+  overview: 'icon-overview',
+  offer: 'icon-add-property',
+  properties: 'icon-properties',
+  saved: 'icon-properties',
+  requests: 'icon-requests',
+  viewings: 'icon-requests',
+  profile: 'icon-profile'
+};
+
+function accountNavIcon(key) {
+  const id = accountNavIcons[key] || 'icon-overview';
+  return `<span aria-hidden="true"><svg class="account-nav__icon" width="18" height="18" focusable="false"><use href="#${id}"></use></svg></span>`;
+}
+
 function accountNavigation(role, view) {
   const items = role === 'tenant'
     ? [['overview', 'Огляд'], ['saved', 'Збережені об’єкти'], ['viewings', 'Мої перегляди'], ['profile', 'Профіль']]
-    : [['overview', 'Огляд'], ['properties', 'Мої об’єкти'], ['requests', 'Заявки клієнтів'], ['profile', 'Профіль']];
-  return items.map(([key, label]) => `<a class="${view === key ? 'is-active' : ''}" href="/account?role=${role}&view=${key}" ${view === key ? 'aria-current="page"' : ''}><span aria-hidden="true">${key === 'overview' ? '◇' : key === 'profile' ? '○' : key === 'requests' || key === 'viewings' ? '□' : '▦'}</span>${label}</a>`).join('');
+    : [['overview', 'Огляд'], ['offer', 'Запропонувати об’єкт'], ['properties', 'Мої об’єкти'], ['requests', 'Заявки клієнтів'], ['profile', 'Профіль']];
+  return items.map(([key, label]) => `<a class="${view === key ? 'is-active' : ''}" href="/account?role=${role}&view=${key}" ${view === key ? 'aria-current="page"' : ''}>${accountNavIcon(key)}${label}</a>`).join('');
 }
 
 function statCards(stats) {
@@ -140,7 +125,29 @@ function emptyAccountState(title, copy, action = '') {
 }
 
 function profileForm(profile, role) {
-  return `<form class="portal-form account-profile-form" data-portal-form novalidate><div class="form-grid">${field('Ім’я та прізвище', `<input name="name" autocomplete="name" value="${profile.name}" aria-describedby="profile-name-error" required>`, 'profile-name')}${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone}" aria-describedby="profile-phone-error" required>`, 'profile-phone')}${field('Email', `<input name="email" type="email" autocomplete="email" value="${profile.email}" aria-describedby="profile-email-error" required>`, 'profile-email')}${field('Місто', `<select name="city" aria-describedby="profile-city-error" required><option>${profile.city}</option></select>`, 'profile-city')}</div>${field('Роль у системі', `<input value="${role === 'tenant' ? 'Орендар' : 'Орендодавець'}" readonly>`, 'profile-role')}<p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary" type="submit">Зберегти зміни</button></form>`;
+  const rolesLabel = [
+    profile.is_tenant || role === 'tenant' ? 'Орендар' : null,
+    profile.is_landlord || role === 'landlord' ? 'Орендодавець' : null
+  ].filter(Boolean).join(' · ') || (role === 'tenant' ? 'Орендар' : 'Орендодавець');
+  return `<form class="portal-form account-profile-form" data-portal-form novalidate><div class="form-grid">${field('Ім’я та прізвище', `<input name="name" autocomplete="name" value="${profile.name || ''}" aria-describedby="profile-name-error" required>`, 'profile-name')}${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone || ''}" aria-describedby="profile-phone-error" required>`, 'profile-phone')}${field('Email', `<input name="email" type="email" autocomplete="email" value="${profile.email || ''}" aria-describedby="profile-email-error" required>`, 'profile-email')}${field('Місто', `<select name="city" aria-describedby="profile-city-error" required><option>${profile.city || 'Київ'}</option></select>`, 'profile-city')}</div>${field('Роль у системі', `<input value="${rolesLabel}" readonly>`, 'profile-role')}<p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary" type="submit">Зберегти зміни</button></form>`;
+}
+
+function offerForm(profile) {
+  return `<form class="portal-form account-offer-form" data-portal-form novalidate>
+    <div class="form-grid">
+      ${field('Ім’я', `<input name="name" autocomplete="name" value="${profile.name || ''}" required>`, 'offer-name')}
+      ${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone || ''}" placeholder="+380 00 000 00 00" required>`, 'offer-phone')}
+      ${field('Email — за бажанням', `<input name="email" type="email" autocomplete="email" value="${profile.email || ''}" placeholder="name@example.com">`, 'offer-email')}
+      ${field('Тип угоди', '<select name="deal" required><option value="">Оберіть</option><option>Продаж</option><option>Оренда</option></select>', 'offer-deal')}
+      ${field('Тип нерухомості', '<select name="type" required><option value="">Оберіть</option><option>Квартира</option><option>Будинок</option></select>', 'offer-type')}
+      ${field('Район або орієнтовна адреса', '<input name="location" required>', 'offer-location')}
+      ${field('Орієнтовна ціна, $', '<input name="price" type="number" min="0" placeholder="Наприклад, 250 000">', 'offer-price')}
+    </div>
+    ${field('Короткий опис — за бажанням', '<textarea name="description" rows="3" maxlength="1000"></textarea>', 'offer-description')}
+    <label class="file-upload"><input type="file" name="photos" accept="image/*" multiple><span><b>Додати фотографії</b><small data-file-status>Файли залишаються тільки у браузері й не надсилаються</small></span></label>
+    <p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p>
+    <button class="button button--primary" type="submit">Надіслати пропозицію</button>
+  </form>`;
 }
 
 function renderOwnerProperties(items) {
@@ -151,6 +158,9 @@ function renderAccountContent(role, view, data, forceState) {
   const profile = data[role];
   if (forceState === 'error') return `<div class="portal-state portal-state--error"><span>!</span><h2>Не вдалося відкрити розділ</h2><p>Це демонстраційний error state кабінету.</p><a class="button button--primary" href="/account?role=${role}&view=${view}">Спробувати ще раз</a></div>`;
   if (view === 'profile') return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Налаштування</p><h1>Профіль користувача</h1><p>Контактні дані для майбутньої роботи із заявками.</p></div></header>${profileForm(profile, role)}`;
+  if (role === 'landlord' && view === 'offer') {
+    return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Розміщення об’єкта</p><h1>Запропонувати об’єкт</h1><p>Заповніть основні відомості. Менеджер допоможе уточнити дані перед публікацією.</p></div></header>${offerForm(profile)}`;
+  }
   if (role === 'tenant' && view === 'saved') {
     const saved = forceState === 'empty' ? [] : profile.savedPropertyIds.map(getProperty).filter(Boolean);
     return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Ваша добірка</p><h1>Збережені об’єкти</h1><p>Поверніться до пропозицій, які хочете порівняти або переглянути.</p></div><a class="button button--primary" href="/catalog?deal=rent">Знайти об’єкти</a></header>${saved.length ? `<div class="account-property-grid">${saved.map(renderPropertyCard).join('')}</div>` : emptyAccountState('Поки що немає збережених об’єктів', 'Додайте пропозиції з каталогу до майбутньої персональної добірки.', '<a class="button button--primary" href="/catalog?deal=rent">Перейти до каталогу</a>')}`;
@@ -161,7 +171,7 @@ function renderAccountContent(role, view, data, forceState) {
   }
   if (role === 'landlord' && view === 'properties') {
     const items = forceState === 'empty' ? [] : profile.propertyIds.map(getProperty).filter(Boolean);
-    return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Керування</p><h1>Мої об’єкти</h1><p>Опубліковані та підготовлені оголошення орендодавця.</p></div><a class="button button--primary" href="/property-editor">Додати об’єкт</a></header>${items.length ? renderOwnerProperties(items) : emptyAccountState('Об’єктів ще немає', 'Створіть першу демонстраційну картку нерухомості.', '<a class="button button--primary" href="/property-editor">Додати об’єкт</a>')}`;
+    return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Керування</p><h1>Мої об’єкти</h1><p>Опубліковані та підготовлені оголошення орендодавця.</p></div><a class="button button--primary" href="/account?role=landlord&view=offer">Запропонувати об’єкт</a></header>${items.length ? renderOwnerProperties(items) : emptyAccountState('Об’єктів ще немає', 'Надішліть пропозицію — менеджер допоможе з розміщенням.', '<a class="button button--primary" href="/account?role=landlord&view=offer">Запропонувати об’єкт</a>')}`;
   }
   if (role === 'landlord' && view === 'requests') {
     const requests = forceState === 'empty' ? [] : profile.requests;
@@ -172,22 +182,64 @@ function renderAccountContent(role, view, data, forceState) {
     return `<header class="account-content__header account-content__header--welcome"><div><p class="eyebrow"><span></span> Кабінет орендаря</p><h1>Вітаємо, ${profile.name.split(' ')[0]}</h1><p>Продовжуйте пошук, переглядайте збережені пропозиції та контролюйте запити.</p></div><a class="button button--primary" href="/catalog?deal=rent">Знайти житло</a></header>${statCards([[profile.savedPropertyIds.length, 'Збережені об’єкти', 'у вашій добірці'], [profile.viewings.filter(item => !/заверш/i.test(item.status)).length, 'Майбутній перегляд', 'очікує підтвердження'], [profile.viewings.length, 'Усі запити', 'історія переглядів']])}<div class="account-columns"><section class="account-panel"><header><div><span>Найближча подія</span><h2>Запланований перегляд</h2></div><a href="/account?role=tenant&view=viewings">Усі перегляди →</a></header>${renderViewings(profile.viewings.slice(0, 1))}</section><section class="account-panel"><header><div><span>Добірка</span><h2>Збережені об’єкти</h2></div><a href="/account?role=tenant&view=saved">Переглянути всі →</a></header><div class="account-mini-list">${saved.map(item => `<a href="/property?id=${item.id}"><img src="${item.image}" alt=""><span><b>${item.title}</b><small>${item.district} · ${formatUsd(item.priceUsd)}${item.deal === 'rent' ? ' / місяць' : ''}</small></span></a>`).join('')}</div></section></div>`;
   }
   const ownerItems = profile.propertyIds.map(getProperty).filter(Boolean);
-  return `<header class="account-content__header account-content__header--welcome"><div><p class="eyebrow"><span></span> Кабінет орендодавця</p><h1>Вітаємо, ${profile.name.split(' ')[0]}</h1><p>Керуйте оголошеннями й переглядайте нові звернення щодо оренди.</p></div><a class="button button--primary" href="/property-editor">Додати об’єкт</a></header>${statCards([[ownerItems.length, 'Мої об’єкти', 'активні оголошення'], [profile.requests.filter(item => /нова/i.test(item.status)).length, 'Нова заявка', 'потребує перегляду'], [profile.requests.length, 'Усі звернення', 'за тестовий період']])}<div class="account-columns"><section class="account-panel"><header><div><span>Оголошення</span><h2>Активні об’єкти</h2></div><a href="/account?role=landlord&view=properties">Керувати →</a></header>${renderOwnerProperties(ownerItems.slice(0, 1))}</section><section class="account-panel"><header><div><span>Клієнти</span><h2>Останні заявки</h2></div><a href="/account?role=landlord&view=requests">Переглянути всі →</a></header>${renderRequests(profile.requests.slice(0, 2))}</section></div>`;
+  return `<header class="account-content__header account-content__header--welcome"><div><p class="eyebrow"><span></span> Кабінет орендодавця</p><h1>Вітаємо, ${profile.name.split(' ')[0]}</h1><p>Керуйте оголошеннями й переглядайте нові звернення щодо оренди.</p></div><a class="button button--primary" href="/account?role=landlord&view=offer">Запропонувати об’єкт</a></header>${statCards([[ownerItems.length, 'Мої об’єкти', 'активні оголошення'], [profile.requests.filter(item => /нова/i.test(item.status)).length, 'Нова заявка', 'потребує перегляду'], [profile.requests.length, 'Усі звернення', 'за тестовий період']])}<div class="account-columns"><section class="account-panel"><header><div><span>Оголошення</span><h2>Активні об’єкти</h2></div><a href="/account?role=landlord&view=properties">Керувати →</a></header>${renderOwnerProperties(ownerItems.slice(0, 1))}</section><section class="account-panel"><header><div><span>Клієнти</span><h2>Останні заявки</h2></div><a href="/account?role=landlord&view=requests">Переглянути всі →</a></header>${renderRequests(profile.requests.slice(0, 2))}</section></div>`;
 }
 
 async function renderAccount() {
   const root = document.getElementById('account-root');
-  const role = params.get('role') === 'landlord' ? 'landlord' : 'tenant';
-  const allowedViews = role === 'tenant' ? ['overview', 'saved', 'viewings', 'profile'] : ['overview', 'properties', 'requests', 'profile'];
-  const view = allowedViews.includes(params.get('view')) ? params.get('view') : 'overview';
+  const authUser = window.Dwelchain?.user;
+  if (!window.Dwelchain?.authenticated || !authUser) {
+    window.location.replace('/auth?mode=login');
+    return;
+  }
+
+  const isTenant = Boolean(authUser.is_tenant);
+  const isLandlord = Boolean(authUser.is_landlord);
+  const requestedView = params.get('view');
+
+  // UI-режим кабінету (як у прототипі): перемикач завжди доступний.
+  let role = params.get('role') === 'landlord' ? 'landlord' : 'tenant';
+  if (requestedView === 'offer') {
+    role = 'landlord';
+  }
+
+  const allowedViews = role === 'tenant'
+    ? ['overview', 'saved', 'viewings', 'profile']
+    : ['overview', 'offer', 'properties', 'requests', 'profile'];
+  const view = allowedViews.includes(requestedView) ? requestedView : 'overview';
   const forceState = ['empty', 'error'].includes(params.get('state')) ? params.get('state') : '';
-  setMeta(role === 'tenant' ? 'Кабінет орендаря' : 'Кабінет орендодавця', 'Демонстраційний особистий кабінет Dwelchain без реальної авторизації та збереження даних.');
+  setMeta(role === 'tenant' ? 'Кабінет орендаря' : 'Кабінет орендодавця', 'Особистий кабінет Dwelchain.');
+
   try {
     const data = await loadAccounts();
-    const profile = data[role];
-    const initials = profile.name.split(' ').map(part => part[0]).slice(0, 2).join('');
-    root.innerHTML = `<div class="prototype-notice"><b>Демонстраційний кабінет</b><span>Дані не зберігаються та не надсилаються.</span></div><div class="account-shell"><aside class="account-sidebar"><div class="account-user"><span>${initials}</span><div><strong>${profile.name}</strong><small>${role === 'tenant' ? 'Орендар' : 'Орендодавець'}</small></div></div><div class="account-role-switch" aria-label="Перемикання демонстраційної ролі"><a class="${role === 'tenant' ? 'is-active' : ''}" href="/account?role=tenant">Орендар</a><a class="${role === 'landlord' ? 'is-active' : ''}" href="/account?role=landlord">Орендодавець</a></div><nav class="account-nav" aria-label="Розділи особистого кабінету">${accountNavigation(role, view)}</nav></aside><section class="account-content">${renderAccountContent(role, view, data, forceState)}</section></div>`;
-    root.querySelectorAll('[data-portal-form]').forEach(form => bindPortalForm(form, '<strong>Зміни підготовлено.</strong><span>У цій версії прототипу дані не зберігаються.</span>'));
+    const demoProfile = data[role] || data.tenant || data.landlord;
+    const profile = {
+      ...demoProfile,
+      name: authUser.name || demoProfile?.name || 'Користувач',
+      phone: authUser.phone || demoProfile?.phone || '',
+      email: authUser.email || demoProfile?.email || '',
+      city: authUser.city || demoProfile?.city || 'Київ',
+      is_tenant: isTenant,
+      is_landlord: isLandlord,
+      savedPropertyIds: demoProfile?.savedPropertyIds || [],
+      viewings: demoProfile?.viewings || [],
+      propertyIds: demoProfile?.propertyIds || [],
+      requests: demoProfile?.requests || []
+    };
+    data[role] = profile;
+
+    const initials = profile.name.split(' ').map(part => part[0]).filter(Boolean).slice(0, 2).join('') || 'D';
+    const roleSwitch = `<div class="account-role-switch" aria-label="Перемикання ролі"><a class="${role === 'tenant' ? 'is-active' : ''}" href="/account?role=tenant">Орендар</a><a class="${role === 'landlord' ? 'is-active' : ''}" href="/account?role=landlord">Орендодавець</a></div>`;
+    const roleLabel = role === 'tenant' ? 'Орендар' : 'Орендодавець';
+
+    root.innerHTML = `<div class="account-shell"><aside class="account-sidebar"><div class="account-user"><span>${initials}</span><div><strong>${profile.name}</strong><small>${roleLabel}</small></div></div>${roleSwitch}<nav class="account-nav" aria-label="Розділи особистого кабінету">${accountNavigation(role, view)}</nav><button class="account-logout" type="button" data-account-logout>Вийти</button></aside><section class="account-content">${renderAccountContent(role, view, data, forceState)}</section></div>`;
+    root.querySelector('[data-account-logout]')?.addEventListener('click', () => logout());
+    root.querySelectorAll('[data-portal-form]').forEach(form => {
+      const isOffer = form.classList.contains('account-offer-form');
+      bindPortalForm(form, isOffer
+        ? '<strong>Пропозицію підготовлено.</strong><span>У наступній фазі вона зберігатиметься в базі для менеджера.</span>'
+        : '<strong>Зміни підготовлено.</strong><span>У цій версії дані профілю ще не зберігаються на сервері.</span>');
+    });
   } catch (error) {
     root.innerHTML = `<div class="portal-state portal-state--error portal-state--page"><span>!</span><h1>Не вдалося завантажити кабінет</h1><p>Перевірте локальні дані та спробуйте ще раз.</p><button class="button button--primary" type="button" data-retry>Спробувати ще раз</button></div>`;
     root.querySelector('[data-retry]').addEventListener('click', () => location.reload());
@@ -232,6 +284,6 @@ function renderPropertyEditor() {
   });
 }
 
-if (portalPage === 'auth') renderAuth();
+if (portalPage === 'auth') initAuthPage();
 if (portalPage === 'account') renderAccount();
 if (portalPage === 'property-editor') renderPropertyEditor();

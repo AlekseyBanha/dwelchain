@@ -24,10 +24,10 @@
 | Фаза | Назва | Результат |
 |------|--------|-----------|
 | **A** | Auth (пароль + email-код) | Реєстрація/вхід, gate на CTA |
-| **B** | Особистий кабінет | Профіль, збережене, заявки користувача |
+| **B** | Особистий кабінет + форма орендодавця | Профіль, favorites, додавання об’єкта (R2 + Google address) |
 | **C** | Каталог + об’єкт + фільтри | Публічний контент з БД |
 | **D** | Заявки (перегляд / власник / менеджер) | Форми пишуть у БД |
-| **E** | Карта + інфо-сторінки + захист/антиспам | Доведення клієнтського MVP |
+| **E** | Карта + geo (Київ) + інфо | Карта, райони з БД, інфо-сторінки |
 
 Далі по фазах детально.
 
@@ -118,15 +118,15 @@ GET  /auth/me                   (або session-based blade)
 
 ### A.4 Критерії готовності фази A
 
-- [ ] Гість на «Записатися на перегляд» / «Запропонувати об’єкт» бачить auth-gate.
-- [ ] Реєстрація з паролем надсилає код на пошту; без коду повний доступ не дається.
-- [ ] Вхід email + пароль відкриває сесію для підтвердженого акаунта.
-- [ ] Непідтверджений email при логіні потрапляє на крок коду.
-- [ ] Recover пароля працює (лист + новий пароль).
-- [ ] Після логіну resume відкриває потрібну бізнес-модалку.
-- [ ] Авторизований одразу бачить бізнес-форму.
-- [ ] Rate limit і TTL коду працюють.
-- [ ] Невалідний/прострочений код і невірний пароль показують зрозумілі помилки.
+- [x] Гість на «Записатися на перегляд» / «Запропонувати об’єкт» бачить auth-gate.
+- [x] Реєстрація з паролем надсилає код на пошту; без коду повний доступ не дається.
+- [x] Вхід email + пароль відкриває сесію для підтвердженого акаунта.
+- [x] Непідтверджений email при логіні потрапляє на крок коду.
+- [x] Recover пароля працює (лист + новий пароль).
+- [x] Після логіну resume відкриває потрібну бізнес-модалку.
+- [x] Авторизований одразу бачить бізнес-форму.
+- [x] Rate limit і TTL коду працюють.
+- [x] Невалідний/прострочений код і невірний пароль показують зрозумілі помилки.
 
 ---
 
@@ -147,20 +147,74 @@ GET  /auth/me                   (або session-based blade)
 
 | Розділ | Що робимо в MVP |
 |--------|------------------|
-| Огляд | Заявки власника, «мої» об’єкти (якщо вже прив’язані) |
-| Мої об’єкти | Список `properties` де `owner_user_id = me` (публікація лише через менеджера/адміна пізніше) |
-| Заявки клієнтів | **Не клієнтська CRM.** У MVP або приховати, або показувати лише агрегований статус «менеджер працює» без повного CRM. Повна обробка — в адмінці (поза скоупом UI). |
+| Огляд | Лічильники: мої об’єкти, чернетки на модерації |
+| Мої об’єкти | Список `properties` де `owner_user_id = me` + кнопка «Додати об’єкт» |
+| Додати / редагувати об’єкт | Повна форма (`/property-editor`) — див. B.3 |
+| Заявки клієнтів | **Не клієнтська CRM.** У MVP приховати або лише статус «менеджер працює». |
 | Профіль | Як у tenant |
 
-`property-editor.html` у клієнтському MVP: **не дає публікувати напряму**. Може бути чернеткою / заявкою власника; фінальна публікація — адмін (схема БД вже готова).
+### B.3 Форма додавання / редагування об’єкта (орендодавець)
 
-### B.3 Критерії готовності фази B
+UI: існуючий `property-editor` (прототип). Доступ лише `auth` + `is_landlord` (або роль landlord увімкнена).
+
+**Публікація напряму заборонена.** Після submit:
+- створюється / оновлюється `properties` зі `status = draft` (або `pending_moderation`, якщо додамо окремий статус);
+- `owner_user_id = current user`;
+- `city_id` = Київ (MVP);
+- чекає менеджера/адміна для `published`.
+
+#### Поля форми (мінімум)
+
+| Поле | Обов’язкове | Джерело |
+|------|-------------|---------|
+| Назва | так | input |
+| Deal (rent/sale) | так | select |
+| Тип нерухомості | так | select |
+| Опис / короткий опис | так / бажано | textarea |
+| Ціна (USD) | так | number |
+| Кімнати, площа, поверх, поверховість | так (де релевантно) | number |
+| **Адреса** | так | **Google Places Autocomplete** |
+| lat / lng | так | з обраного place (hidden) |
+| google_place_id | бажано | з place |
+| Район (`district_id`) | так (авто або ручний fallback) | резолв з точки / select районів Києва |
+| Фото (1…N) | так мінімум 1 cover | upload → **Cloudflare R2** |
+
+Редагування: `/property-editor?id=…` лише власних draft/hidden об’єктів; published — обмежено (або read-only до адмінки).
+
+### B.4 Завантаження фото в Cloudflare R2
+
+- Диск Laravel `s3`-compatible → R2 (`AWS_ENDPOINT`, `AWS_BUCKET`, keys у `.env`).
+- Потік (рекомендований):
+  1. `POST /account/properties/media/presign` → temporary upload URL + object key;
+  2. клієнт PUT файл напряму в R2;
+  3. `POST` збереження об’єкта з масивом keys / порядок / cover.
+- Альтернатива MVP: multipart через Laravel → Storage::disk('r2').
+- Валідація: jpg/png/webp, max size (напр. 5–10 MB), max N фото, MIME/real image check.
+- У `property_images`: `path` = R2 key, `sort_order`, `is_cover`.
+- Публічний URL через R2 custom domain / `AWS_URL` для каталогу.
+
+### B.5 Адреса через Google Maps (у формі орендодавця)
+
+Уже на фазі B (не відкладати до E):
+
+1. Поле адреси = Places Autocomplete, bias на Київ.
+2. Після вибору place → `latitude`, `longitude`, `google_place_id`, `address_private`.
+3. На submit бекенд резолвить `city_id` / `district_id` (див. E.3); якщо не Київ — помилка валідації.
+4. На формі можна показати міні-карту з маркером обраної точки (Google Maps JS).
+5. `address_public` формуємо на бекенді (район + орієнтир без точного номера — за політикою).
+
+### B.6 Критерії готовності фази B
 
 - [ ] `/account` доступний лише авторизованим (редирект на auth).
 - [ ] Профіль зберігається в БД.
-- [ ] Favorites працюють.
+- [ ] Favorites працюють (tenant).
 - [ ] Список власних заявок на перегляд відображається зі статусами з БД.
 - [ ] Перемикач ролей tenant/landlord працює, якщо обидві увімкнені.
+- [ ] Landlord бачить «Мої об’єкти» і відкриває `/property-editor`.
+- [ ] Форма створює draft-об’єкт у БД з `owner_user_id`, `city_id`, `district_id`, lat/lng.
+- [ ] Адреса обирається через Google Places; lat/lng не вводяться вручну як основний шлях.
+- [ ] Фото вантажаться в R2 і прив’язуються до об’єкта (cover + порядок).
+- [ ] Об’єкт **не** з’являється в публічному каталозі без статусу `published`.
 
 ---
 
@@ -185,7 +239,8 @@ GET  /auth/me                   (або session-based blade)
 ### C.3 Фільтри (базові з ТЗ)
 
 - deal: rent | sale  
-- district  
+- **місто: лише Київ** (див. фазу E / geo) — у UI select зафіксований або прихований  
+- district → `districts` де `city_id = Київ`  
 - property type  
 - rooms  
 - price min / max  
@@ -194,11 +249,11 @@ GET  /auth/me                   (або session-based blade)
 
 ### C.4 Сторінка об’єкта
 
-Галерея, атрибути (ціна, район/приблизна адреса, кімнати, площа, поверх, поверховість, тип), опис, карта (приблизна), CTA перегляд + менеджер.
+Галерея, атрибути (ціна, район/приблизна адреса, кімнати, площа, поверх, поверховість, тип), опис, **карта району/approx точки** (фаза E), CTA перегляд + менеджер.
 
 При відкритті сторінки: інкремент `properties.views_count` (ідемпотентність по сесії/IP на день — бажано одразу, щоб аналітика не роздувалась).
 
-Лише `status = published` і не `hidden`/`archived`.
+Лише `status = published` і не `hidden`/`archived`. Об’єкти MVP лише з `city_id` = Київ.
 
 ---
 
@@ -213,14 +268,14 @@ GET  /auth/me                   (або session-based blade)
 - Статуси (для адмінки, клієнт бачить read-only):  
   `new` → `contacted` → `confirmed` → `rescheduled` → `completed` | `cancelled`
 
-### D.2 Заявка власника (§7)
+### D.2 Заявка власника (§7) / CTA «Запропонувати об’єкт»
 
-Поля: ім’я, телефон, email?, deal, type, district/address, price estimate, short description, photos (якщо погодимо upload).
+Два шляхи (не дублювати зайве):
 
-- Тільки для авторизованих.
-- **Не публікує** об’єкт автоматично.
-- Статуси:  
-  `new` → `contacted` → `meeting_planned` → `verifying` → `property_created` → `published` | `rejected` | `closed`
+1. **Авторизований landlord** → після auth-gate вести на **`/property-editor`** (повна форма з B.3: Google address + R2 фото).
+2. Коротка модалка `owner-modal` — лише якщо користувач ще не landlord / швидкий лід; у MVP можна одразу промоутити в editor після реєстрації з роллю landlord.
+
+Повна картка об’єкта з фото й адресою — через форму кабінету (фаза B), не через урізану модалку.
 
 ### D.3 Питання менеджеру (§8)
 
@@ -231,12 +286,74 @@ GET  /auth/me                   (або session-based blade)
 
 ---
 
-## Фаза E — Карта, інфо, технічне
+## Фаза E — Карта, geo, інфо, технічне
 
-- Карта на сторінці об’єкта (координати approx; точна адреса не публічна).
-- Окрема `/map` з прототипу — якщо час дозволяє в тому ж MVP.
+### E.1 Geo-шар (уже в міграціях / сиді)
+
+У БД є PostGIS і довідники на все майбутнє масштабування:
+
+| Таблиця | Призначення |
+|---------|-------------|
+| `regions` | області (+ `location` Point, `boundaries` Polygon) |
+| `cities` | міста (`region_id`, `has_districts`, Point/Polygon) |
+| `districts` | райони міста (`city_id`, Point/Polygon) |
+
+Імпорт: `GeoSeeder` + `GeoImportService` з `geo-fetch/` (усі регіони/міста/райони України підвантажені **на майбутнє**).
+
+**Київ у даних:** `cities.id = 268`, `slug = kyyiv`, райони (10): Голосіївський, Дарницький, Деснянський, Дніпровський, Оболонський, Печерський, Подільський, Святошинський, Солом’янський, Шевченківський.
+
+### E.2 Обмеження MVP: тільки Київ
+
+1. Публічний каталог, карта, фільтри, заявки власника — **лише Київ**.
+2. UI: місто не вибирається вільно (select «Київ» disabled / єдиний option / взагалі без вибору).
+3. API/query: ігнорувати або відхиляти `city_id` ≠ Київ; завжди скоуп `where city_id = <kyiv_id>`.
+4. Фільтр районів: `districts` де `city_id = Київ`.
+5. Реєстрація/профіль: місто default Київ (`city_id` або legacy string → краще FK).
+6. Інші міста/області в БД **не чіпаємо і не показуємо** — запас під post-MVP.
+
+Константа/config: наприклад `config('dwelchain.mvp_city_slug') = 'kyyiv'` або `mvp_city_id = 268`.
+
+### E.3 Ввід адреси (Google Maps) → збереження в БД
+
+**Перший робочий кейс — форма орендодавця у фазі B** (`/property-editor`). Той самий пайплайн потім для адмінки.
+
+Для створення/редагування об’єкта:
+
+1. Користувач вводить адресу в **Google Places Autocomplete** (обмеження bias/componentRestrictions на **Київ / UA** у MVP).
+2. Обирає підказку → Google віддає `place_id`, **formatted address**, **lat**, **lng** (і компоненти адреси).
+3. Фронт (або бекенд) надсилає на API: `{ latitude, longitude, address_raw?, place_id? }`.
+4. Бекенд:
+   - зберігає `latitude`, `longitude`, PostGIS `location`;
+   - `address_private` = повна адреса з Google (не для публічки);
+   - `address_public` = скорочений/приблизний варіант (район + орієнтир, без номера будинку — за політикою приватності);
+   - резолвить **`city_id`**: точка ∈ `cities.boundaries` (MVP: має бути Київ, інакше reject);
+   - резолвить **`district_id`**: точка ∈ `districts.boundaries` цього міста; якщо полігон порожній — fallback nearest `districts.location`;
+   - зберігає об’єкт уже з `city_id`, `district_id`, координатами.
+
+Публічний користувач на каталозі **не** бачить точну адресу — лише приблизну точку / район.
+
+### E.4 Показ карти на клієнті
+
+- **Сторінка об’єкта:** Google Map з **приблизною** точкою (або jitter / центр району). Точний `address_private` не віддаємо в публічний API.
+- **`/map`:** Google Map по Києву — маркери published-об’єктів, sync зі списком/фільтрами. Popup → сторінка об’єкта.
+- Наші `regions` / `cities` / `districts` — джерело істини для FK і фільтрів; Google — UX вибору адреси + тайли/маркери.
+- API key у `.env` (`GOOGLE_MAPS_API_KEY`), обмеження по HTTP referrer / IP.
+
+### E.5 Інфо + технічне
+
 - Сторінки: Про нас, Контакти, Політика, Умови (§13).
 - Валідація серверна, CSRF, upload whitelist (jpg/png/webp, max size), SSL на деплої.
+- Антиспам форм: throttle + honeypot.
+
+### E.6 Критерії готовності фази E
+
+- [ ] Autocomplete адреси через Google Places (скоуп Київ).
+- [ ] Збереження об’єкта з lat/lng + резолвом `city_id` / `district_id` з наших geo-таблиць.
+- [ ] Фільтр районів тягнеться з `districts` Києва, не з хардкоду HTML.
+- [ ] Каталог/карта не віддають об’єкти поза Києвом.
+- [ ] На `/property` і `/map` — Google Map з приблизними маркерами.
+- [ ] Публічний API не віддає `address_private`.
+- [ ] Повний geo-довідник у БД залишається для майбутніх міст без UI в MVP.
 
 ---
 
@@ -252,7 +369,7 @@ GET  /auth/me                   (або session-based blade)
 | email_verified_at | timestamp nullable | після коду з пошти |
 | password | string | обов’язковий, hashed |
 | phone | string nullable | |
-| city | string nullable | default Київ |
+| city | string nullable / або `city_id` FK | default Київ; краще FK на `cities` |
 | is_tenant | bool | default true |
 | is_landlord | bool | default false |
 | is_admin | bool | **запас під адмінку**, UI не будуємо |
@@ -285,18 +402,20 @@ GET  /auth/me                   (або session-based blade)
 | description | text | |
 | deal | enum rent/sale | |
 | type | string/enum | apartment, house, townhouse… |
-| district | string | |
-| address_public | string nullable | приблизна |
-| address_private | string nullable | **тільки адмін** |
-| city | string | |
+| city_id | FK → cities | **MVP: завжди Київ (268)** |
+| district_id | FK → districts nullable | район Києва |
+| address_public | string nullable | те, що бачить гість (район / орієнтир) |
+| address_private | string nullable | повна адреса з Google; **не в публічний API** |
+| google_place_id | string nullable | для повторного резолву / аудиту |
 | price_usd | decimal | |
 | price_uah | decimal nullable | |
 | rooms | int | |
 | area | decimal | |
 | floor | int nullable | |
 | total_floors | int nullable | |
-| lat / lng | decimal nullable | approx для карти |
-| status | enum | `draft`, `published`, `hidden`, `archived` |
+| latitude / longitude | decimal nullable | з Google Places |
+| location | geography(Point,4326) nullable | PostGIS Point з тих самих lat/lng |
+| status | enum | `draft`, `pending_moderation` (опційно), `published`, `hidden`, `archived` |
 | is_featured | bool | |
 | is_new | bool | |
 | views_count | unsigned int default 0 | **аналітика / адмін** |
@@ -315,7 +434,7 @@ GET  /auth/me                   (або session-based blade)
 |------|-----|
 | id | |
 | property_id | FK |
-| path | string |
+| path | string | R2 object key |
 | alt | string nullable |
 | sort_order | int |
 | is_cover | bool |
@@ -365,9 +484,15 @@ GET  /auth/me                   (або session-based blade)
 
 name, phone, email?, channel, message, status (`new`/`closed`), `admin_notes`, user_id nullable, timestamps.
 
-### 2.10 Довідники (пізніше або seed)
+### 2.10 Geo-довідники (уже є)
 
-districts, property_types — можна спочатку enum/seed у коді.
+Міграції: `enable_postgis`, `regions`, `cities`, `districts`.  
+Seed: повний імпорт України з `geo-fetch/` — **дані ширші за MVP**.
+
+У клієнтському MVP читаємо лише Київ і його `districts`.  
+`property_types` — окремий enum/seed у коді (не geo).
+
+Не дублювати райони хардкодом у Blade/JS — джерело істини БД.
 
 ---
 
@@ -394,8 +519,8 @@ districts, property_types — можна спочатку enum/seed у коді.
 | Модалки viewing / owner / manager | Підключити submit → API; viewing/owner через auth-gate |
 | `auth.html` | Залишити пароль; додати крок email-коду + recover |
 | `account.html` | Дані з API/Blade замість `accounts.json` |
+| `property-editor.html` | **Фаза B:** форма landlord — Google Places + upload фото в R2 → draft у БД |
 | `properties.json` | Замінити сидом БД + API/Blade |
-| `property-editor.html` | Або зв’язати з owner request, або сховати до фази D |
 | Контакти в коді | Винести в config; поки тестові |
 
 Маршрути Laravel вже є (`routes/web.php`): `/`, `/catalog`, `/map`, `/property`, `/auth`, `/account`, `/property-editor`.
@@ -407,6 +532,7 @@ districts, property_types — можна спочатку enum/seed у коді.
 - UI адмінки / CRM (§9–11)
 - Зміна статусів заявок менеджером
 - Повна аналітика-дашборд (§12) — лише `views_count` + заявки в БД
+- **Інші міста України** (довідник уже в БД через geo-fetch, UI/скоуп — після MVP)
 - AI, call-центр, інвестиційні метрики, платежі
 - Мобільна окрема версія (адаптив існуючого CSS — за можливості)
 
@@ -417,8 +543,10 @@ districts, property_types — можна спочатку enum/seed у коді.
 1. **SMTP** для кодів: Mailtrap на dev, прод-провайдер?
 2. Чи обов’язкова роль на реєстрації, чи default `tenant` і роль додається пізніше?
 3. Чи manager-форма теж за auth-gate?
-4. Чи upload фото в заявці власника в першому релізі?
-5. Валюта відображення: USD primary як у прототипі?
+4. Валюта відображення: USD primary як у прототипі?
+5. Google Maps: квоти / billing на Places Autocomplete + Maps JS (ключ уже потрібен у фазі B).
+6. Наскільки «розмивати» публічну точку на карті (точний pin vs центр району / jitter).
+7. R2: public bucket vs signed URLs для фото в каталозі.
 
 ---
 
@@ -428,8 +556,8 @@ districts, property_types — можна спочатку enum/seed у коді.
 2. Mail + register/login + `VerifyCode` / resend / password reset.
 3. Auth UI: сторінка (пароль + код) + модалка gate.
 4. Підвісити gate на `data-modal-open="viewing-modal"` і `owner-modal`.
-5. Потім фаза B (кабінет), далі C→D→E.
+5. Потім фаза B (кабінет), далі C→D→E (карта лише Київ на базі geo-таблиць).
 
 ---
 
-*Останнє оновлення: 2026-07-26. Джерело: клієнтське «ТЗ для MVP», прототип frontend, уточнення: auth = пароль + email-код; порядок auth → кабінет → решта; без адмін UI.*
+*Останнє оновлення: 2026-07-26. Джерело: клієнтське «ТЗ для MVP», прототип frontend, geo-міграції, Google Places → lat/lng → city_id/district_id; MVP = Київ; auth = пароль + email-код; без адмін UI.*

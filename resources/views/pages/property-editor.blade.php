@@ -6,7 +6,8 @@
   <meta name="description" content="Демонстраційна frontend-форма додавання та редагування об’єкта в кабінеті Dwelchain.">
   <title>Додати об’єкт | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260725-accounts2">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  @include('partials.boot')
 </head>
 <body data-page="account" data-portal-page="property-editor">
   <div data-site-header></div>
@@ -16,6 +17,6 @@
     </div>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260726-authflow1"></script>
+  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260726-selects3"></script>
 </body>
 </html>

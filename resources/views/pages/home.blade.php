@@ -6,7 +6,8 @@
   <meta name="description" content="Нерухомість у Києві для життя та інвестицій. Порівнюйте ціни, характеристики й райони, обирайте об’єкт і звертайтеся до менеджера щодо перегляду.">
   <title>Нерухомість у Києві для купівлі та оренди | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260725-accounts1">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  @include('partials.boot')
 </head>
 <body data-page="home">
   <div data-site-header></div>
@@ -154,7 +155,7 @@
     <section class="business-model" id="business-model" data-section-tone="dark" aria-labelledby="business-model-title">
       <div class="section-shell">
         <header class="business-model__header">
-          <p class="business-model__label">▣&nbsp; Як ми працюємо</p>
+          <p class="business-model__label">?&nbsp; Як ми працюємо</p>
           <h2 id="business-model-title">Операційна модель <span>Dwelchain</span></h2>
           <p>Ми не просто сайт оголошень. Dwelchain — це команда спеціалістів, яка проходить кожен крок угоди разом з вами.</p>
         </header>
@@ -243,7 +244,7 @@
           <h2 id="investor-title">Рішення починається з прозорого порівняння</h2>
           <p class="investor-section__lead">Dwelchain збирає в одному інтерфейсі дані, потрібні для первинної оцінки об’єкта: ціну, площу, район, характеристики та фотографії.</p>
           <div class="investor-benefits">
-            <article><span>01</span><div><h3>Зрозуміла ціна входу</h3><p>Основна ціна, орієнтовний еквівалент у гривнях і ціна за м² відображаються безпосередньо в картці.</p></div></article>
+            <article><span>01</span><div><h3>Зрозуміла ціна входу</h3><p>Основна ціна, орієнтовний еквівалент у гривнях і ціна за м? відображаються безпосередньо в картці.</p></div></article>
             <article><span>02</span><div><h3>Контекст розташування</h3><p>Каталог і карта допомагають порівняти пропозиції у вибраних районах Києва.</p></div></article>
             <article><span>03</span><div><h3>Наступний крок із менеджером</h3><p>Сформулюйте критерії інвестиційного запиту та уточніть деталі конкретних об’єктів.</p></div></article>
           </div>
@@ -260,10 +261,10 @@
           <p>Квартира з панорамними вікнами на Печерську</p>
           <strong>285 000 $</strong>
           <div class="investment-profile__facts">
-            <span><small>Площа</small><b>92 м²</b></span>
+            <span><small>Площа</small><b>92 м?</b></span>
             <span><small>Кімнати</small><b>3</b></span>
             <span><small>Район</small><b>Печерський</b></span>
-            <span><small>Ціна за м²</small><b>3 098 $</b></span>
+            <span><small>Ціна за м?</small><b>3 098 $</b></span>
           </div>
           <div class="investment-profile__route">
             <span>Каталог</span><i></i><span>Карта</span><i></i><span>Перегляд</span>
@@ -276,7 +277,7 @@
 
     <section class="section section-shell owner-cta" data-section-tone="light">
       <div class="owner-cta__image"><img src="{{ asset('assets/images/residence.png') }}" alt="Житловий комплекс із внутрішнім зеленим подвір’ям"></div>
-      <div class="owner-cta__copy"><p class="eyebrow eyebrow--gold"><span></span> Для власників і девелоперів</p><h2>Запропонуйте об’єкт для розміщення</h2><p>Додайте основні дані про квартиру, будинок або інший об’єкт. Менеджер допоможе уточнити інформацію для майбутнього розміщення.</p><button class="button button--light" type="button" data-modal-open="owner-modal">Запропонувати об’єкт <span aria-hidden="true">→</span></button></div>
+      <div class="owner-cta__copy"><p class="eyebrow eyebrow--gold"><span></span> Для власників і девелоперів</p><h2>Запропонуйте об’єкт для розміщення</h2><p>Додайте основні дані про квартиру, будинок або інший об’єкт. Менеджер допоможе уточнити інформацію для майбутнього розміщення.</p><button class="button button--light" type="button" data-account-offer>Запропонувати об’єкт <span aria-hidden="true">→</span></button></div>
     </section>
 
     <section class="section section-shell contact" id="contacts" data-section-tone="dark">
@@ -291,6 +292,6 @@
     </section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260725-investors1"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260726-selects3"></script>
 </body>
 </html>

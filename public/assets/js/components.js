@@ -1,6 +1,9 @@
 import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=20260725-accounts1';
+import { authGateMarkup, goToOfferForm, openAuthGate, shouldGateModal } from './auth.js?v=20260726-selects3';
+import { initSelects } from './select.js?v=20260726-selects3';
 
 export function headerMarkup(active) {
+  const cabinetHref = window.Dwelchain?.authenticated ? '/account' : '/auth';
   return `<header class="site-header"><div class="section-shell site-header__inner">
     <a class="brand" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.png" alt=""></a>
     <nav class="site-nav" aria-label="Основна навігація">
@@ -8,11 +11,11 @@ export function headerMarkup(active) {
       <a class="${active === 'catalog' || active === 'property' ? 'is-active' : ''}" href="/catalog">Каталог</a>
       <a class="${active === 'map' ? 'is-active' : ''}" href="/map">Карта</a>
       <a href="/#business-model">Інвесторам</a>
-      <a class="${active === 'auth' || active === 'account' ? 'is-active' : ''}" href="/auth">Кабінет</a>
+      <a class="${active === 'auth' || active === 'account' ? 'is-active' : ''}" href="${cabinetHref}">Кабінет</a>
     </nav>
     <div class="site-header__actions">
       <button class="button button--header" type="button" data-modal-open="manager-modal">Зв’язатися з менеджером</button>
-      <button class="button button--header" type="button" data-modal-open="owner-modal">Запропонувати об’єкт <span aria-hidden="true">→</span></button>
+      <button class="button button--header" type="button" data-account-offer>Запропонувати об’єкт <span aria-hidden="true">→</span></button>
     </div>
   </div></header>`;
 }
@@ -21,7 +24,7 @@ export function footerMarkup() {
   // TEMPORARY PROTOTYPE CONTACTS: replace with approved client details before production.
   return `<footer class="site-footer" id="site-footer"><div class="section-shell">
     <div class="site-footer__top"><div><a class="brand brand--footer" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.png" alt=""></a><p>Нерухомість для купівлі та оренди в Києві.</p></div>
-    <div><strong>Навігація</strong><a href="/catalog">Каталог</a><a href="/map">Карта</a><a href="/auth">Особистий кабінет</a><a href="/#about">Про сервіс</a><a href="/#business-model">Інвесторам</a><button class="button button--footer" type="button" data-modal-open="manager-modal">Зв’язатися з менеджером</button><button class="button button--footer" type="button" data-modal-open="owner-modal">Запропонувати об’єкт</button></div>
+    <div><strong>Навігація</strong><a href="/catalog">Каталог</a><a href="/map">Карта</a><a href="${window.Dwelchain?.authenticated ? '/account' : '/auth'}">Особистий кабінет</a><a href="/#about">Про сервіс</a><a href="/#business-model">Інвесторам</a><button class="button button--footer" type="button" data-modal-open="manager-modal">Зв’язатися з менеджером</button><button class="button button--footer" type="button" data-account-offer>Запропонувати об’єкт</button></div>
     <div><strong>Контакти</strong><a href="tel:+380441234567">+380 44 123 45 67</a><a href="mailto:hello@dwelchain.com">hello@dwelchain.com</a><span>Київ, Україна</span><span>Пн–Пт, 09:00–18:00</span><span>Telegram · Viber · WhatsApp</span></div></div>
     <div class="site-footer__bottom"><span>© 2026 Dwelchain.</span><span>Нерухомість для життя та інвестицій.</span></div>
   </div></footer>`;
@@ -60,8 +63,7 @@ function formField(label, input, errorId) {
 export function dialogsMarkup() {
   return `<dialog class="modal" id="viewing-modal" role="dialog" aria-labelledby="viewing-title" aria-modal="true"><div class="modal__panel"><button class="modal__close" type="button" data-modal-close aria-label="Закрити форму запису на перегляд">×</button><p class="eyebrow"><span></span> Запит на перегляд</p><h2 id="viewing-title">Записатися на перегляд</h2><p class="modal__lead">Оберіть зручні дату й час. У цій версії прототипу дані не надсилаються.</p><form class="demo-form" data-demo-form novalidate>
     <div class="form-grid">${formField('Обраний об’єкт','<input id="viewing-property" name="property" value="Об’єкт буде визначено на сторінці оголошення" aria-describedby="viewing-property-error" readonly>','viewing-property-error')}${formField('Ім’я','<input id="viewing-name" name="name" autocomplete="name" aria-describedby="viewing-name-error" required>','viewing-name-error')}${formField('Телефон','<input id="viewing-phone" name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" aria-describedby="viewing-phone-error" required>','viewing-phone-error')}${formField('Email — за бажанням','<input id="viewing-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="viewing-email-error">','viewing-email-error')}${formField('Бажана дата','<input id="viewing-date" name="date" type="date" aria-describedby="viewing-date-error" required>','viewing-date-error')}${formField('Бажаний час','<input id="viewing-time" name="time" type="time" aria-describedby="viewing-time-error" required>','viewing-time-error')}</div>${formField('Коментар — за бажанням','<textarea id="viewing-comment" name="comment" rows="3" maxlength="600" placeholder="Наприклад, зручний час для дзвінка" aria-describedby="viewing-comment-error"></textarea>','viewing-comment-error')}<p class="form-message" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Надіслати заявку</button></form></div></dialog>
-  <dialog class="modal" id="manager-modal" role="dialog" aria-labelledby="manager-title" aria-modal="true"><div class="modal__panel"><button class="modal__close" type="button" data-modal-close aria-label="Закрити форму зв’язку з менеджером">×</button><p class="eyebrow"><span></span> Зв’язок із менеджером</p><h2 id="manager-title">Поставити запитання</h2><p class="modal__lead">Опишіть, що хочете уточнити. У цій версії прототипу дані не надсилаються.</p><form class="demo-form" data-demo-form novalidate><div class="form-grid">${formField('Ім’я','<input id="manager-name" name="name" autocomplete="name" aria-describedby="manager-name-error" required>','manager-name-error')}${formField('Телефон','<input id="manager-phone" name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" aria-describedby="manager-phone-error" required>','manager-phone-error')}${formField('Email — за бажанням','<input id="manager-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="manager-email-error">','manager-email-error')}${formField('Зручний спосіб зв’язку','<select id="manager-channel" name="channel" aria-describedby="manager-channel-error" required><option value="">Оберіть</option><option>Телефон</option><option>Telegram</option><option>Viber</option><option>WhatsApp</option><option>Email</option></select>','manager-channel-error')}</div>${formField('Запитання','<textarea id="manager-question" name="question" rows="4" maxlength="1000" placeholder="Що хочете уточнити про об’єкт?" aria-describedby="manager-question-error" required></textarea>','manager-question-error')}<p class="form-message" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Надіслати запитання</button></form></div></dialog>
-  <dialog class="modal" id="owner-modal" role="dialog" aria-labelledby="owner-title" aria-modal="true"><div class="modal__panel modal__panel--wide"><button class="modal__close" type="button" data-modal-close aria-label="Закрити форму власника">×</button><p class="eyebrow"><span></span> Розміщення об’єкта</p><h2 id="owner-title">Запропонувати об’єкт</h2><p class="modal__lead">Додайте основні відомості. У цій версії прототипу дані й фотографії не надсилаються.</p><form class="demo-form" data-demo-form novalidate><div class="form-grid">${formField('Ім’я','<input id="owner-name" name="name" autocomplete="name" aria-describedby="owner-name-error" required>','owner-name-error')}${formField('Телефон','<input id="owner-phone" name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" aria-describedby="owner-phone-error" required>','owner-phone-error')}${formField('Email — за бажанням','<input id="owner-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="owner-email-error">','owner-email-error')}${formField('Тип угоди','<select id="owner-deal" name="deal" aria-describedby="owner-deal-error" required><option value="">Оберіть</option><option>Продаж</option><option>Оренда</option></select>','owner-deal-error')}${formField('Тип нерухомості','<select id="owner-type" name="type" aria-describedby="owner-type-error" required><option value="">Оберіть</option><option>Квартира</option><option>Будинок</option></select>','owner-type-error')}${formField('Район або орієнтовна адреса','<input id="owner-location" name="location" aria-describedby="owner-location-error" required>','owner-location-error')}${formField('Орієнтовна ціна, $','<input id="owner-price" name="price" type="number" min="0" placeholder="Наприклад, 250 000" aria-describedby="owner-price-error">','owner-price-error')}</div>${formField('Короткий опис — за бажанням','<textarea id="owner-description" name="description" rows="3" maxlength="1000" aria-describedby="owner-description-error"></textarea>','owner-description-error')}<label class="file-upload"><input type="file" name="photos" accept="image/*" multiple><span><b>Додати фотографії</b><small data-file-status>Файли залишаються тільки у браузері й не надсилаються</small></span></label><p class="form-message" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Запропонувати об’єкт</button></form></div></dialog>`;
+  <dialog class="modal" id="manager-modal" role="dialog" aria-labelledby="manager-title" aria-modal="true"><div class="modal__panel"><button class="modal__close" type="button" data-modal-close aria-label="Закрити форму зв’язку з менеджером">×</button><p class="eyebrow"><span></span> Зв’язок із менеджером</p><h2 id="manager-title">Поставити запитання</h2><p class="modal__lead">Опишіть, що хочете уточнити. У цій версії прототипу дані не надсилаються.</p><form class="demo-form" data-demo-form novalidate><div class="form-grid">${formField('Ім’я','<input id="manager-name" name="name" autocomplete="name" aria-describedby="manager-name-error" required>','manager-name-error')}${formField('Телефон','<input id="manager-phone" name="phone" type="tel" autocomplete="tel" placeholder="+380 00 000 00 00" aria-describedby="manager-phone-error" required>','manager-phone-error')}${formField('Email — за бажанням','<input id="manager-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" aria-describedby="manager-email-error">','manager-email-error')}${formField('Зручний спосіб зв’язку','<select id="manager-channel" name="channel" aria-describedby="manager-channel-error" required><option value="">Оберіть</option><option>Телефон</option><option>Telegram</option><option>Viber</option><option>WhatsApp</option><option>Email</option></select>','manager-channel-error')}</div>${formField('Запитання','<textarea id="manager-question" name="question" rows="4" maxlength="1000" placeholder="Що хочете уточнити про об’єкт?" aria-describedby="manager-question-error" required></textarea>','manager-question-error')}<p class="form-message" aria-live="polite"></p><button class="button button--primary button--full" type="submit">Надіслати запитання</button></form></div></dialog>${authGateMarkup()}`;
 }
 
 export function renderMapMock(location) {
@@ -77,16 +79,29 @@ export function mountChrome() {
   document.querySelectorAll('[data-site-header]').forEach(node => node.innerHTML = headerMarkup(active));
   document.querySelectorAll('[data-site-footer]').forEach(node => node.innerHTML = footerMarkup());
   document.body.insertAdjacentHTML('beforeend', dialogsMarkup());
+  initSelects();
 }
 
 export function initDialogs() {
   const triggers = new WeakMap();
   const syncScrollLock = () => document.body.classList.toggle('modal-open', Boolean(document.querySelector('dialog[open]')));
   document.addEventListener('click', event => {
+    const offer = event.target.closest('[data-account-offer]');
+    if (offer) {
+      event.preventDefault();
+      goToOfferForm();
+      return;
+    }
     const opener = event.target.closest('[data-modal-open]');
     if (opener) {
-      const dialog = document.getElementById(opener.dataset.modalOpen);
-      if (dialog) { triggers.set(dialog, opener); dialog.showModal(); syncScrollLock(); setTimeout(() => (dialog.querySelector('input:not([type="file"]):not([readonly]), select, textarea') || dialog.querySelector('button'))?.focus(), 0); }
+      const modalId = opener.dataset.modalOpen;
+      if (shouldGateModal(modalId)) {
+        event.preventDefault();
+        openAuthGate({ pendingModalId: modalId });
+        return;
+      }
+      const dialog = document.getElementById(modalId);
+      if (dialog) { triggers.set(dialog, opener); dialog.showModal(); syncScrollLock(); setTimeout(() => (dialog.querySelector('input:not([type="file"]):not([readonly]), .dc-select__trigger, select, textarea') || dialog.querySelector('button'))?.focus(), 0); }
     }
     const closer = event.target.closest('[data-modal-close]');
     if (closer) closer.closest('dialog')?.close();
@@ -96,7 +111,7 @@ export function initDialogs() {
     dialog.addEventListener('keydown', event => {
       if (event.key === 'Escape') { event.preventDefault(); dialog.close(); return; }
       if (event.key !== 'Tab') return;
-      const focusable = [...dialog.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]')].filter(element => element.offsetParent !== null);
+      const focusable = [...dialog.querySelectorAll('button:not([disabled]), input:not([disabled]), .dc-select__trigger:not([disabled]), textarea:not([disabled]), a[href]')].filter(element => element.offsetParent !== null);
       if (!focusable.length) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];

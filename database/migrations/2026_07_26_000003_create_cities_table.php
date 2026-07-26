@@ -9,6 +9,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('region_id')

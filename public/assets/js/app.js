@@ -1,5 +1,5 @@
 import { dataLoadError, properties, propertyTypes, formatUah, formatUsd, imageAlts } from './data.js?v=20260725-accounts1';
-import { initDialogs, mountChrome, renderMapMock, renderPropertyCard } from './components.js?v=20260725-investors1';
+import { initDialogs, mountChrome, renderMapMock, renderPropertyCard } from './components.js?v=20260726-selects3';
 
 mountChrome();
 initDialogs();

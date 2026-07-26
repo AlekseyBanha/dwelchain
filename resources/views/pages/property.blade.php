@@ -6,12 +6,13 @@
   <meta name="description" content="Фото, ціна, характеристики та приблизне розташування об’єкта нерухомості в Києві.">
   <title>Об’єкт нерухомості в Києві | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260725-accounts1">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  @include('partials.boot')
 </head>
 <body data-page="property">
   <div data-site-header></div>
   <main id="property-root" aria-live="polite"><p class="sr-only" role="status">Завантажуємо інформацію про об’єкт…</p></main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260725-investors1"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260726-selects3"></script>
 </body>
 </html>
