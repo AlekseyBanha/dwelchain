@@ -49,7 +49,9 @@ COPY ./docker-files/php/config/php.ini $PHP_INI_DIR/php.ini
 
 # Caddyfile: listen on :{$PORT:80} (Render sets PORT at runtime; local default 80).
 # Do NOT bake SERVER_NAME=:${PORT} via ENV — Docker expands it at build time only.
+# Пишемо в обидва шляхи: COPY ламає hardlink /etc/caddy ↔ /etc/frankenphp.
 COPY ./docker-files/php/Caddyfile /etc/caddy/Caddyfile
+COPY ./docker-files/php/Caddyfile /etc/frankenphp/Caddyfile
 
 # ---------- development ----------
 FROM builder AS php-franken-dev
@@ -68,3 +70,5 @@ RUN rm /usr/local/bin/composer
 COPY ./docker-files/php/docker-entrypoint.sh /usr/local/bin/app-entrypoint.sh
 RUN chmod +x /usr/local/bin/app-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/app-entrypoint.sh"]
+# Переоголошуємо CMD: при зміні ENTRYPOINT батьківський CMD може втратитись.
+CMD ["--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
