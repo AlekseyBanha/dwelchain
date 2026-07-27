@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог квартир і будинків у Києві з пошуком за ціною, площею, поверхом, станом, комплектацією та типом будинку.">
   <title>Каталог нерухомості в Києві | Dwelchain</title>
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
@@ -68,6 +69,6 @@
     <section class="section section-shell compact-cta"><div><p class="eyebrow eyebrow--gold"><span></span> Маєте нерухомість?</p><h2>Запропонуйте об’єкт для розміщення в Dwelchain</h2></div><button class="button button--light" type="button" data-account-offer>Запропонувати об’єкт <span aria-hidden="true">→</span></button></section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260726-selects3"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260727-images1"></script>
 </body>
 </html>

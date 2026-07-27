@@ -1,11 +1,11 @@
-import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=20260725-accounts1';
+import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=20260727-images1';
 import { authGateMarkup, goToOfferForm, openAuthGate, shouldGateModal } from './auth.js?v=20260727-loaders1';
 import { initSelects } from './select.js?v=20260726-selects3';
 
 export function headerMarkup(active) {
   const cabinetHref = window.Dwelchain?.authenticated ? '/account' : '/auth';
   return `<header class="site-header"><div class="section-shell site-header__inner">
-    <a class="brand" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.png" alt=""></a>
+    <a class="brand" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.webp" alt="" width="166" height="78" decoding="async"></a>
     <nav class="site-nav" aria-label="Основна навігація">
       <a class="${active === 'home' ? 'is-active' : ''}" href="/">Головна</a>
       <a class="${active === 'catalog' || active === 'property' ? 'is-active' : ''}" href="/catalog">Каталог</a>
@@ -23,7 +23,7 @@ export function headerMarkup(active) {
 export function footerMarkup() {
   // TEMPORARY PROTOTYPE CONTACTS: replace with approved client details before production.
   return `<footer class="site-footer" id="site-footer"><div class="section-shell">
-    <div class="site-footer__top"><div><a class="brand brand--footer" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.png" alt=""></a><p>Нерухомість для купівлі та оренди в Києві.</p></div>
+    <div class="site-footer__top"><div><a class="brand brand--footer" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.webp" alt="" width="170" height="82" loading="lazy" decoding="async"></a><p>Нерухомість для купівлі та оренди в Києві.</p></div>
     <div><strong>Навігація</strong><a href="/catalog">Каталог</a><a href="/map">Карта</a><a href="${window.Dwelchain?.authenticated ? '/account' : '/auth'}">Особистий кабінет</a><a href="/#about">Про сервіс</a><a href="/#business-model">Інвесторам</a><button class="button button--footer" type="button" data-modal-open="manager-modal">Зв’язатися з менеджером</button><button class="button button--footer" type="button" data-account-offer>Запропонувати об’єкт</button></div>
     <div><strong>Контакти</strong><a href="tel:+380441234567">+380 44 123 45 67</a><a href="mailto:hello@dwelchain.com">hello@dwelchain.com</a><span>Київ, Україна</span><span>Пн–Пт, 09:00–18:00</span><span>Telegram · Viber · WhatsApp</span></div></div>
     <div class="site-footer__bottom"><span>© 2026 Dwelchain.</span><span>Нерухомість для життя та інвестицій.</span></div>
@@ -37,7 +37,7 @@ export function renderPropertyCard(property) {
     : `≈ ${formatUah(property.priceUah)} на місяць`;
   const imageAlt = property.imageAlt || imageAlts[property.image] || `Фотографія об’єкта: ${property.title}`;
   const image = property.image
-    ? `<img src="${property.image}" alt="${imageAlt}" loading="lazy">`
+    ? `<img src="${property.image}" alt="${imageAlt}" loading="lazy" decoding="async" width="640" height="427">`
     : '<span class="property-card__placeholder" aria-label="Фотографія об’єкта відсутня"><b>D</b><small>Фото ще не додано</small></span>';
   return `<article class="property-card">
     <a class="property-card__image" href="/property?id=${property.id}" aria-label="Переглянути об’єкт: ${property.title}">

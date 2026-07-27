@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Демонстраційна frontend-форма додавання та редагування об’єкта в кабінеті Dwelchain.">
   <title>Додати об’єкт | Dwelchain</title>
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
@@ -17,6 +18,6 @@
     </div>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-account-nav1"></script>
+  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-images1"></script>
 </body>
 </html>

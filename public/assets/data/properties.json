@@ -22,13 +22,13 @@
     "balcony": false,
     "buildingType": "monolith",
     "developer": "City Garden",
-    "image": "/assets/images/living-room.png",
+    "image": "/assets/images/living-room.webp",
     "images": [
-      "/assets/images/living-room.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/residence.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/living-room.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": true,
     "featured": true,
@@ -59,13 +59,13 @@
     "balcony": true,
     "buildingType": "brick",
     "developer": "Приватний власник",
-    "image": "/assets/images/panoramic-interior.png",
+    "image": "/assets/images/panoramic-interior.webp",
     "images": [
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/living-room.png",
-      "/assets/images/residence.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": false,
     "featured": true,
@@ -96,13 +96,13 @@
     "balcony": true,
     "buildingType": "brick",
     "developer": "Riverside Development",
-    "image": "/assets/images/residence.png",
+    "image": "/assets/images/residence.webp",
     "images": [
-      "/assets/images/residence.png",
-      "/assets/images/living-room.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/residence.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": true,
     "featured": true,
@@ -133,13 +133,13 @@
     "balcony": true,
     "buildingType": "house",
     "developer": "Приватний власник",
-    "image": "/assets/images/villa.png",
+    "image": "/assets/images/villa.webp",
     "images": [
-      "/assets/images/villa.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/living-room.png",
-      "/assets/images/residence.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/villa.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": false,
     "featured": false,
@@ -170,13 +170,13 @@
     "balcony": true,
     "buildingType": "monolith",
     "developer": "Riverside Development",
-    "image": "/assets/images/living-room.png",
+    "image": "/assets/images/living-room.webp",
     "images": [
-      "/assets/images/living-room.png",
-      "/assets/images/residence.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/living-room.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": true,
     "featured": false,
@@ -207,13 +207,13 @@
     "balcony": true,
     "buildingType": "brick",
     "developer": "Приватний власник",
-    "image": "/assets/images/panoramic-interior.png",
+    "image": "/assets/images/panoramic-interior.webp",
     "images": [
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/living-room.png",
-      "/assets/images/villa.png",
-      "/assets/images/residence.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": false,
     "featured": false,
@@ -244,13 +244,13 @@
     "balcony": true,
     "buildingType": "monolith",
     "developer": "Urban Residence",
-    "image": "/assets/images/living-room.png",
+    "image": "/assets/images/living-room.webp",
     "images": [
-      "/assets/images/living-room.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/residence.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/living-room.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": false,
     "featured": false,
@@ -281,13 +281,13 @@
     "balcony": true,
     "buildingType": "brick",
     "developer": "Приватний власник",
-    "image": "/assets/images/panoramic-interior.png",
+    "image": "/assets/images/panoramic-interior.webp",
     "images": [
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/residence.png",
-      "/assets/images/living-room.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": true,
     "featured": false,
@@ -318,13 +318,13 @@
     "balcony": true,
     "buildingType": "panel",
     "developer": "Urban Residence",
-    "image": "/assets/images/residence.png",
+    "image": "/assets/images/residence.webp",
     "images": [
-      "/assets/images/residence.png",
-      "/assets/images/living-room.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/villa.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/residence.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": false,
     "featured": false,
@@ -355,13 +355,13 @@
     "balcony": true,
     "buildingType": "monolith",
     "developer": "City Garden",
-    "image": "/assets/images/panoramic-interior.png",
+    "image": "/assets/images/panoramic-interior.webp",
     "images": [
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/villa.png",
-      "/assets/images/living-room.png",
-      "/assets/images/residence.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/villa.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": true,
     "featured": false,
@@ -392,13 +392,13 @@
     "balcony": true,
     "buildingType": "townhouse",
     "developer": "Приватний власник",
-    "image": "/assets/images/villa.png",
+    "image": "/assets/images/villa.webp",
     "images": [
-      "/assets/images/villa.png",
-      "/assets/images/residence.png",
-      "/assets/images/living-room.png",
-      "/assets/images/panoramic-interior.png",
-      "/assets/images/bedroom.png"
+      "/assets/images/villa.webp",
+      "/assets/images/residence.webp",
+      "/assets/images/living-room.webp",
+      "/assets/images/panoramic-interior.webp",
+      "/assets/images/bedroom.webp"
     ],
     "isNew": false,
     "featured": false,

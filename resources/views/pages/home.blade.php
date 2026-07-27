@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Нерухомість у Києві для життя та інвестицій. Порівнюйте ціни, характеристики й райони, обирайте об’єкт і звертайтеся до менеджера щодо перегляду.">
   <title>Нерухомість у Києві для купівлі та оренди | Dwelchain</title>
-  <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
@@ -28,20 +29,20 @@
         <div class="hub-group">
           <div class="hub-group__heading"><h3>Купівля</h3><a href="{{ url('/catalog') }}?deal=sale">Усі об’єкти <span aria-hidden="true">→</span></a></div>
           <div class="hub-tiles">
-            <a class="hub-tile" href="{{ url('/catalog') }}?deal=sale" aria-label="Усі об’єкти для купівлі"><img src="{{ asset('assets/images/residence.png') }}" alt=""><span>Усі об’єкти</span></a>
-            <a class="hub-tile" href="{{ url('/catalog') }}?deal=sale&amp;type=apartment"><img src="{{ asset('assets/images/living-room.png') }}" alt=""><span>Квартири</span></a>
-            <a class="hub-tile" href="{{ url('/catalog') }}?deal=sale&amp;type=house"><img src="{{ asset('assets/images/villa.png') }}" alt=""><span>Будинки</span></a>
-            <a class="hub-tile" href="{{ url('/catalog') }}?city=Київ&amp;deal=sale&amp;type=house&amp;buildingType=townhouse"><img src="{{ asset('assets/images/villa.png') }}" alt=""><span>Таунхауси</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?deal=sale" aria-label="Усі об’єкти для купівлі"><img src="{{ asset('assets/images/residence-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Усі об’єкти</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?deal=sale&amp;type=apartment"><img src="{{ asset('assets/images/living-room-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Квартири</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?deal=sale&amp;type=house"><img src="{{ asset('assets/images/villa-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Будинки</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?city=Київ&amp;deal=sale&amp;type=house&amp;buildingType=townhouse"><img src="{{ asset('assets/images/villa-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Таунхауси</span></a>
           </div>
         </div>
 
         <div class="hub-group">
           <div class="hub-group__heading"><h3>Оренда</h3><a href="{{ url('/catalog') }}?deal=rent">Усі об’єкти <span aria-hidden="true">→</span></a></div>
           <div class="hub-tiles">
-            <a class="hub-tile" href="{{ url('/catalog') }}?deal=rent" aria-label="Усі об’єкти для оренди"><img src="{{ asset('assets/images/bedroom.png') }}" alt=""><span>Усі об’єкти</span></a>
-            <a class="hub-tile" href="{{ url('/catalog') }}?deal=rent&amp;type=apartment"><img src="{{ asset('assets/images/living-room.png') }}" alt=""><span>Квартири</span></a>
-            <a class="hub-tile" href="{{ url('/catalog') }}?deal=rent&amp;type=house"><img src="{{ asset('assets/images/residence.png') }}" alt=""><span>Будинки</span></a>
-            <a class="hub-tile" href="{{ url('/catalog') }}?city=Київ&amp;deal=rent&amp;type=house&amp;buildingType=townhouse"><img src="{{ asset('assets/images/villa.png') }}" alt=""><span>Таунхауси</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?deal=rent" aria-label="Усі об’єкти для оренди"><img src="{{ asset('assets/images/bedroom-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Усі об’єкти</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?deal=rent&amp;type=apartment"><img src="{{ asset('assets/images/living-room-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Квартири</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?deal=rent&amp;type=house"><img src="{{ asset('assets/images/residence-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Будинки</span></a>
+            <a class="hub-tile" href="{{ url('/catalog') }}?city=Київ&amp;deal=rent&amp;type=house&amp;buildingType=townhouse"><img src="{{ asset('assets/images/villa-tile.webp') }}" alt="" width="480" height="320" decoding="async"><span>Таунхауси</span></a>
           </div>
         </div>
 
@@ -55,7 +56,7 @@
       </div>
 
       <div class="home-hub__feature">
-        <img src="{{ asset('assets/images/villa.png') }}" alt="Сучасний будинок із ландшафтним подвір’ям">
+        <img src="{{ asset('assets/images/villa.webp') }}" alt="Сучасний будинок із ландшафтним подвір’ям" width="1280" height="853" fetchpriority="high" decoding="async">
         <div class="home-hub__feature-copy">
           <p class="eyebrow eyebrow--gold"><span></span> Dwelchain · Київ</p>
           <h1 id="home-hub-title">Нерухомість для купівлі та оренди</h1>
@@ -276,7 +277,7 @@
     </section>
 
     <section class="section section-shell owner-cta" data-section-tone="light">
-      <div class="owner-cta__image"><img src="{{ asset('assets/images/residence.png') }}" alt="Житловий комплекс із внутрішнім зеленим подвір’ям"></div>
+      <div class="owner-cta__image"><img src="{{ asset('assets/images/residence.webp') }}" alt="Житловий комплекс із внутрішнім зеленим подвір’ям" width="1280" height="853" loading="lazy" decoding="async"></div>
       <div class="owner-cta__copy"><p class="eyebrow eyebrow--gold"><span></span> Для власників і девелоперів</p><h2>Запропонуйте об’єкт для розміщення</h2><p>Додайте основні дані про квартиру, будинок або інший об’єкт. Менеджер допоможе уточнити інформацію для майбутнього розміщення.</p><button class="button button--light" type="button" data-account-offer>Запропонувати об’єкт <span aria-hidden="true">→</span></button></div>
     </section>
 
@@ -292,6 +293,6 @@
     </section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260726-selects3"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260727-images1"></script>
 </body>
 </html>

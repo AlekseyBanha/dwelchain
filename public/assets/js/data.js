@@ -1,9 +1,9 @@
 export const imageAlts = {
-  '/assets/images/living-room.png': 'Вітальня з панорамними вікнами та видом на місто',
-  '/assets/images/panoramic-interior.png': 'Кухня-їдальня з панорамними вікнами',
-  '/assets/images/residence.png': 'Житловий комплекс із внутрішнім двором',
-  '/assets/images/villa.png': 'Двоповерховий будинок із ландшафтним подвір’ям',
-  '/assets/images/bedroom.png': 'Спальня з панорамними вікнами'
+  '/assets/images/living-room.webp': 'Вітальня з панорамними вікнами та видом на місто',
+  '/assets/images/panoramic-interior.webp': 'Кухня-їдальня з панорамними вікнами',
+  '/assets/images/residence.webp': 'Житловий комплекс із внутрішнім двором',
+  '/assets/images/villa.webp': 'Двоповерховий будинок із ландшафтним подвір’ям',
+  '/assets/images/bedroom.webp': 'Спальня з панорамними вікнами'
 };
 
 export const propertyTypes = {
@@ -13,7 +13,7 @@ export const propertyTypes = {
 
 export let dataLoadError = null;
 
-export const properties = await fetch(new URL('../data/properties.json', import.meta.url), { cache: 'no-store' })
+export const properties = await fetch(new URL('../data/properties.json', import.meta.url))
   .then(response => {
     if (!response.ok) throw new Error(`Не вдалося завантажити дані: ${response.status}`);
     return response.json();

@@ -1,5 +1,5 @@
-import { initDialogs, mountChrome, renderPropertyCard } from './components.js?v=20260726-selects3';
-import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260725-accounts1';
+import { initDialogs, mountChrome, renderPropertyCard } from './components.js?v=20260727-images1';
+import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-images1';
 import { initAuthPage, logout } from './auth.js?v=20260727-loaders1';
 
 mountChrome();
@@ -65,7 +65,7 @@ function bindPortalForm(form, successContent) {
 }
 
 async function loadAccounts() {
-  return fetch(new URL('../data/accounts.json', import.meta.url), { cache: 'no-store' })
+  return fetch(new URL('../data/accounts.json', import.meta.url))
     .then(response => {
       if (!response.ok) throw new Error(`Не вдалося завантажити кабінет: ${response.status}`);
       return response.json();
