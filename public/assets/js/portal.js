@@ -1,6 +1,6 @@
-import { initDialogs, initSoftNav, mountChrome, renderPropertyCard } from './components.js?v=20260727-profile2';
-import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-profile2';
-import { api, initAuthPage, logout, setAuthState } from './auth.js?v=20260727-profile2';
+import { initDialogs, initSoftNav, mountChrome, renderPropertyCard } from './components.js?v=20260727-profile3';
+import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-profile3';
+import { api, initAuthPage, logout, setAuthState } from './auth.js?v=20260727-profile3';
 
 mountChrome();
 initDialogs();
@@ -114,12 +114,12 @@ function profileEmailVerifyMarkup(email, message = '') {
   </div>`;
 }
 
-function renderProfileSection(profile, role, pendingEmail = '') {
+function renderProfileSection(profile, pendingEmail = '') {
   const header = `<header class="account-content__header"><div><p class="eyebrow"><span></span> Налаштування</p><h1>Профіль користувача</h1><p>${pendingEmail ? 'Підтвердіть новий email кодом із листа, щоб завершити оновлення.' : 'Контактні дані для майбутньої роботи із заявками.'}</p></div></header>`;
   if (pendingEmail) {
     return `${header}${profileEmailVerifyMarkup(pendingEmail, 'Код уже надіслано на нову пошту.')}`;
   }
-  return `${header}${profileForm(profile, role)}`;
+  return `${header}${profileForm(profile)}`;
 }
 
 function syncAccountUserChip(user) {
@@ -185,7 +185,7 @@ function bindProfileForm(form) {
       if (data.status === 'email_change_required') {
         const host = form.closest('.account-content') || form.parentElement;
         if (!host) return;
-        host.innerHTML = renderProfileSection(data.user, new URLSearchParams(location.search).get('role') === 'landlord' ? 'landlord' : 'tenant', data.email);
+        host.innerHTML = renderProfileSection(data.user, data.email);
         bindProfileEmailVerify(host);
         return;
       }
@@ -425,12 +425,8 @@ function emptyAccountState(title, copy, action = '') {
   return `<div class="portal-state"><span>◇</span><h2>${title}</h2><p>${copy}</p>${action}</div>`;
 }
 
-function profileForm(profile, role) {
-  const rolesLabel = [
-    profile.is_tenant || role === 'tenant' ? 'Орендар' : null,
-    profile.is_landlord || role === 'landlord' ? 'Орендодавець' : null
-  ].filter(Boolean).join(' · ') || (role === 'tenant' ? 'Орендар' : 'Орендодавець');
-  return `<form class="portal-form account-profile-form" data-portal-form data-profile-form novalidate><div class="form-grid">${field('Ім’я та прізвище', `<input name="name" autocomplete="name" value="${profile.name || ''}" aria-describedby="profile-name-error" required>`, 'profile-name')}${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone || ''}" aria-describedby="profile-phone-error" required>`, 'profile-phone')}${field('Email', `<input name="email" type="email" autocomplete="email" value="${profile.email || ''}" aria-describedby="profile-email-error" required>`, 'profile-email')}${field('Місто', `<select name="city" aria-describedby="profile-city-error" required><option value="Київ">${profile.city || 'Київ'}</option></select>`, 'profile-city')}</div>${field('Роль у системі', `<input value="${rolesLabel}" readonly>`, 'profile-role')}<p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary" type="submit">Зберегти зміни</button></form>`;
+function profileForm(profile) {
+  return `<form class="portal-form account-profile-form" data-portal-form data-profile-form novalidate><div class="form-grid">${field('Ім’я та прізвище', `<input name="name" autocomplete="name" value="${profile.name || ''}" aria-describedby="profile-name-error" required>`, 'profile-name')}${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone || ''}" aria-describedby="profile-phone-error" required>`, 'profile-phone')}${field('Email', `<input name="email" type="email" autocomplete="email" value="${profile.email || ''}" aria-describedby="profile-email-error" required>`, 'profile-email')}${field('Місто', `<select name="city" aria-describedby="profile-city-error" required><option value="Київ">${profile.city || 'Київ'}</option></select>`, 'profile-city')}</div><p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary" type="submit">Зберегти зміни</button></form>`;
 }
 
 function offerForm(profile) {
@@ -460,7 +456,7 @@ function renderAccountContent(role, view, data, forceState) {
   if (forceState === 'error') return `<div class="portal-state portal-state--error"><span>!</span><h2>Не вдалося відкрити розділ</h2><p>Це демонстраційний error state кабінету.</p><a class="button button--primary" href="/account?role=${role}&view=${view}">Спробувати ще раз</a></div>`;
   if (view === 'profile') {
     const pendingEmail = window.Dwelchain?.pendingEmailChange || '';
-    return renderProfileSection(profile, role, pendingEmail);
+    return renderProfileSection(profile, pendingEmail);
   }
   if (role === 'landlord' && view === 'offer') {
     return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Розміщення об’єкта</p><h1>Запропонувати об’єкт</h1><p>Заповніть основні відомості. Менеджер допоможе уточнити дані перед публікацією.</p></div></header>${offerForm(profile)}`;
