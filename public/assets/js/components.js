@@ -2,7 +2,9 @@ import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=2026
 import { authGateMarkup, goToOfferForm, openAuthGate, shouldGateModal } from './auth.js?v=20260727-loaders1';
 import { initSelects } from './select.js?v=20260726-selects3';
 
-const SOFT_NAV_PATHS = new Set(['/', '/catalog', '/map', '/property', '/design-system']);
+const APP_SOFT_NAV_PATHS = new Set(['/', '/catalog', '/map', '/property', '/design-system']);
+const PORTAL_SOFT_NAV_PATHS = new Set(['/auth', '/account', '/property-editor']);
+const SOFT_NAV_PATHS = new Set([...APP_SOFT_NAV_PATHS, ...PORTAL_SOFT_NAV_PATHS]);
 const pageBoots = Object.create(null);
 let softNavBound = false;
 let softNavToken = 0;
@@ -11,13 +13,13 @@ let chromeMounted = false;
 export function headerMarkup(active) {
   const cabinetHref = window.Dwelchain?.authenticated ? '/account' : '/auth';
   return `<header class="site-header"><div class="section-shell site-header__inner">
-    <a class="brand" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.webp" alt="" width="166" height="78" decoding="async"></a>
+    <a class="brand" href="/" aria-label="Перейти на головну сторінку Dwelchain"><img class="brand__logo" src="/assets/images/dwelchain-logo-clean.webp" alt="" width="166" height="78" decoding="sync" fetchpriority="high"></a>
     <nav class="site-nav" aria-label="Основна навігація">
-      <a class="${active === 'home' ? 'is-active' : ''}" href="/">Головна</a>
-      <a class="${active === 'catalog' || active === 'property' ? 'is-active' : ''}" href="/catalog">Каталог</a>
-      <a class="${active === 'map' ? 'is-active' : ''}" href="/map">Карта</a>
-      <a href="/#business-model">Інвесторам</a>
-      <a class="${active === 'auth' || active === 'account' ? 'is-active' : ''}" href="${cabinetHref}">Кабінет</a>
+      <a data-nav="home" class="${active === 'home' ? 'is-active' : ''}" href="/">Головна</a>
+      <a data-nav="catalog" class="${active === 'catalog' || active === 'property' ? 'is-active' : ''}" href="/catalog">Каталог</a>
+      <a data-nav="map" class="${active === 'map' ? 'is-active' : ''}" href="/map">Карта</a>
+      <a data-nav="business" href="/#business-model">Інвесторам</a>
+      <a data-nav="cabinet" class="${active === 'auth' || active === 'account' ? 'is-active' : ''}" href="${cabinetHref}">Кабінет</a>
     </nav>
     <div class="site-header__actions">
       <button class="button button--header" type="button" data-modal-open="manager-modal">Зв’язатися з менеджером</button>
@@ -30,10 +32,32 @@ export function registerPageBoot(name, boot) {
   pageBoots[name] = boot;
 }
 
+function syncHeaderState(host, active) {
+  const nav = host.querySelector('.site-nav');
+  if (!nav) return;
+
+  const cabinetLink = nav.querySelector('[data-nav="cabinet"]');
+  if (cabinetLink) cabinetLink.setAttribute('href', window.Dwelchain?.authenticated ? '/account' : '/auth');
+
+  nav.querySelectorAll('a').forEach(link => link.classList.remove('is-active'));
+  const homeLink = nav.querySelector('[data-nav="home"]');
+  const catalogLink = nav.querySelector('[data-nav="catalog"]');
+  const mapLink = nav.querySelector('[data-nav="map"]');
+  if (active === 'home') homeLink?.classList.add('is-active');
+  if (active === 'catalog' || active === 'property') catalogLink?.classList.add('is-active');
+  if (active === 'map') mapLink?.classList.add('is-active');
+  if (active === 'auth' || active === 'account') cabinetLink?.classList.add('is-active');
+}
+
 export function refreshHeader() {
   const active = document.body.dataset.page;
   document.querySelectorAll('[data-site-header]').forEach(node => {
-    node.innerHTML = headerMarkup(active);
+    const mountedHeader = node.querySelector('.site-header');
+    if (!mountedHeader) {
+      node.innerHTML = headerMarkup(active);
+      return;
+    }
+    syncHeaderState(mountedHeader, active);
   });
 }
 
@@ -85,7 +109,7 @@ function hardNavigateWithLoader(href) {
 }
 
 function canSoftNavigate(url) {
-  return SOFT_NAV_PATHS.has(url.pathname) && typeof pageBoots.app === 'function';
+  return SOFT_NAV_PATHS.has(url.pathname);
 }
 
 function isHeaderNavTarget(url) {
@@ -137,7 +161,9 @@ async function softNavigate(href, { push = true } = {}) {
     if (token !== softNavToken) return;
 
     const doc = new DOMParser().parseFromString(html, 'text/html');
-    if (doc.body.dataset.portalPage || !SOFT_NAV_PATHS.has(new URL(response.url || nextPath, location.href).pathname)) {
+    const finalUrl = new URL(response.url || nextPath, location.href);
+    const finalPath = finalUrl.pathname;
+    if (!SOFT_NAV_PATHS.has(finalPath)) {
       leaving = true;
       hardNavigateWithLoader(next.href);
       return;
@@ -157,11 +183,20 @@ async function softNavigate(href, { push = true } = {}) {
       document.querySelector('meta[name="description"]')?.setAttribute('content', description);
     }
     document.body.dataset.page = doc.body.dataset.page || '';
-    document.body.removeAttribute('data-portal-page');
+    if (doc.body.dataset.portalPage) document.body.dataset.portalPage = doc.body.dataset.portalPage;
+    else document.body.removeAttribute('data-portal-page');
     oldMain.replaceWith(document.importNode(newMain, true));
     refreshHeader();
-    if (push) history.pushState({ soft: true }, '', `${nextPath}${next.hash}`);
-    pageBoots.app();
+    if (push) history.pushState({ soft: true }, '', `${finalPath}${finalUrl.search}${next.hash}`);
+
+    if (PORTAL_SOFT_NAV_PATHS.has(finalPath)) {
+      const portal = await import('./portal.js?v=20260727-softnav6');
+      portal.initPortalPage?.();
+    } else {
+      await import('./app.js?v=20260727-softnav6');
+      pageBoots.app?.();
+    }
+
     if (next.hash) scrollToHash(next.hash);
     else window.scrollTo(0, 0);
   } catch {

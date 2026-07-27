@@ -6,9 +6,6 @@ mountChrome();
 initDialogs();
 initSoftNav();
 
-const portalPage = document.body.dataset.portalPage;
-const params = new URLSearchParams(location.search);
-
 function setMeta(title, description) {
   document.title = `${title} | Dwelchain`;
   document.querySelector('meta[name="description"]')?.setAttribute('content', description);
@@ -317,6 +314,7 @@ function renderPropertyEditor() {
     root.querySelector('[data-retry]').addEventListener('click', () => location.reload());
     return;
   }
+  const params = new URLSearchParams(location.search);
   const item = params.get('id') ? getProperty(params.get('id')) : null;
   const editing = Boolean(item);
   setMeta(editing ? 'Редагувати об’єкт' : 'Додати об’єкт', 'Демонстраційна frontend-форма об’єкта Dwelchain без реального завантаження фотографій і збереження даних.');
@@ -339,6 +337,11 @@ function renderPropertyEditor() {
   });
 }
 
-if (portalPage === 'auth') initAuthPage();
-if (portalPage === 'account') renderAccount();
-if (portalPage === 'property-editor') renderPropertyEditor();
+export function initPortalPage() {
+  const portalPage = document.body.dataset.portalPage;
+  if (portalPage === 'auth') initAuthPage();
+  if (portalPage === 'account') renderAccount();
+  if (portalPage === 'property-editor') renderPropertyEditor();
+}
+
+initPortalPage();

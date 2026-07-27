@@ -1,4 +1,5 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="preload" as="image" href="{{ asset('assets/images/dwelchain-logo-clean.webp') }}" fetchpriority="high">
 <script>
   window.Dwelchain = Object.assign({}, window.Dwelchain || {}, {
     csrfToken: @json(csrf_token()),

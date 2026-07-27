@@ -24,7 +24,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scrollbar-gutter: stable both-edges; overflow-y: scroll; }
 body { margin: 0; min-width: var(--desktop-canvas); color: var(--ink); background: var(--surface); font-family: var(--body); font-size: var(--text-base); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 body:has(dialog[open]) { overflow: hidden; }
 body.modal-open { overflow: hidden; }
@@ -270,6 +270,19 @@ code { font-family: Consolas, monospace; }
   background:
     linear-gradient(90deg, transparent 0 14px, #E8E8EA 14px 180px, transparent 180px 210px, #E8E8EA 210px 58%, transparent 58% 66%, #E8E8EA 66% 100%);
   opacity: .85;
+}
+[data-site-header]:empty::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 0;
+  left: 0;
+  width: min(1280px, calc(100% - 96px));
+  height: 78px;
+  margin-inline: auto;
+  background: url("/assets/images/dwelchain-logo-clean.webp") left center / 166px 78px no-repeat;
+  opacity: .45;
+  pointer-events: none;
 }
 body.is-navigating { cursor: progress; }
 body.is-navigating main { opacity: .55; pointer-events: none; transition: opacity .15s ease; }
