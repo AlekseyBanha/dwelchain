@@ -9,6 +9,17 @@
   <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-softnav6">
   @include('partials.boot')
+  <style id="account-guard-style">body{visibility:hidden;}</style>
+  <script>
+    (() => {
+      const state = window.Dwelchain || {};
+      if (!state.authenticated || !state.user) {
+        window.location.replace('/auth?mode=login');
+        return;
+      }
+      document.getElementById('account-guard-style')?.remove();
+    })();
+  </script>
 </head>
 <body data-page="account" data-portal-page="account">
   @include('partials.account-icons')
