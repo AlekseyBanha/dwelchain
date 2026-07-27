@@ -7,6 +7,7 @@ function boot() {
   return window.Dwelchain || {
     authenticated: false,
     user: null,
+    pendingEmailChange: null,
     csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || '',
     routes: {
       register: '/auth/register',
@@ -18,7 +19,11 @@ function boot() {
       logout: '/auth/logout',
       me: '/auth/me',
       account: '/account',
-      auth: '/auth'
+      auth: '/auth',
+      profileUpdate: '/account/profile',
+      profileEmailConfirm: '/account/profile/email/confirm',
+      profileEmailResend: '/account/profile/email/resend',
+      profileEmailCancel: '/account/profile/email/cancel'
     },
     auth: {
       codeTtlMinutes: 10,
@@ -28,10 +33,11 @@ function boot() {
   };
 }
 
-function setAuthState({ authenticated, user, csrfToken } = {}) {
+export function setAuthState({ authenticated, user, csrfToken, pendingEmailChange } = {}) {
   const state = boot();
   if (typeof authenticated === 'boolean') state.authenticated = authenticated;
   if (user !== undefined) state.user = user;
+  if (pendingEmailChange !== undefined) state.pendingEmailChange = pendingEmailChange;
   if (csrfToken) {
     state.csrfToken = csrfToken;
     const meta = document.querySelector('meta[name="csrf-token"]');

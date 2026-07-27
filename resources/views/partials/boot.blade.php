@@ -5,6 +5,7 @@
     csrfToken: @json(csrf_token()),
     authenticated: @json(auth()->check()),
     user: @json(auth()->user()?->toClientArray()),
+    pendingEmailChange: @json(session('pending_email_change')),
     routes: {
       register: @json(url('/auth/register')),
       login: @json(url('/auth/login')),
@@ -15,7 +16,11 @@
       logout: @json(url('/auth/logout')),
       me: @json(url('/auth/me')),
       account: @json(url('/account')),
-      auth: @json(url('/auth'))
+      auth: @json(url('/auth')),
+      profileUpdate: @json(url('/account/profile')),
+      profileEmailConfirm: @json(url('/account/profile/email/confirm')),
+      profileEmailResend: @json(url('/account/profile/email/resend')),
+      profileEmailCancel: @json(url('/account/profile/email/cancel'))
     },
     auth: {
       codeTtlMinutes: @json((int) config('dwelchain.auth.code_ttl_minutes', 10)),

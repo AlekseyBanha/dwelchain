@@ -1,6 +1,6 @@
-import { initDialogs, initSoftNav, mountChrome, renderPropertyCard } from './components.js?v=20260727-softnav6';
-import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-softnav6';
-import { initAuthPage, logout } from './auth.js?v=20260727-loaders1';
+import { initDialogs, initSoftNav, mountChrome, renderPropertyCard } from './components.js?v=20260727-profile2';
+import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-profile2';
+import { api, initAuthPage, logout, setAuthState } from './auth.js?v=20260727-profile2';
 
 mountChrome();
 initDialogs();
@@ -27,6 +27,7 @@ function validatePortalField(input, form) {
   if (input.required && !value) message = input.type === 'checkbox' ? 'Підтвердьте цей пункт.' : 'Заповніть поле.';
   if (!message && input.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) message = 'Вкажіть коректний email.';
   if (!message && input.type === 'tel' && value && value.replace(/\D/g, '').length < 10) message = 'Вкажіть телефон щонайменше з 10 цифр.';
+  if (!message && input.name === 'code' && value && !/^\d{6}$/.test(value)) message = 'Введіть 6-значний код.';
   if (!message && input.name === 'password' && value.length < 8) message = 'Пароль має містити щонайменше 8 символів.';
   if (!message && input.name === 'passwordConfirm' && value !== form.elements.password?.value) message = 'Паролі не збігаються.';
   if (!message && input.type === 'number' && value && input.min !== '' && Number(value) < Number(input.min)) message = `Мінімальне значення — ${input.min}.`;
@@ -59,6 +60,259 @@ function bindPortalForm(form, successContent) {
     message.className = 'portal-form-status is-success';
     message.innerHTML = typeof successContent === 'function' ? successContent(form) : successContent;
     message.focus({ preventScroll: true });
+  });
+}
+
+function setPortalStatus(form, text, type = '') {
+  const node = form.querySelector('[data-form-status]');
+  if (!node) return;
+  node.className = `portal-form-status ${type}`.trim();
+  node.textContent = text;
+  if (text) node.focus({ preventScroll: true });
+}
+
+function setPortalStatusLoading(form, label = 'Зберігаємо…') {
+  const node = form.querySelector('[data-form-status]');
+  if (!node) return;
+  node.className = 'portal-form-status is-loading';
+  node.innerHTML = `<span class="portal-form-status__spinner" aria-hidden="true"></span><span>${label}</span>`;
+}
+
+function setPortalButtonLoading(button, loading, busyLabel = 'Завантаження') {
+  if (!button) return;
+  button.classList.toggle('is-loading', loading);
+  button.disabled = loading;
+  button.setAttribute('aria-busy', loading ? 'true' : 'false');
+  if (loading) button.setAttribute('aria-label', busyLabel);
+  else button.removeAttribute('aria-label');
+}
+
+function applyPortalServerErrors(form, errors = {}) {
+  Object.entries(errors).forEach(([name, messages]) => {
+    const input = form.elements[name];
+    if (input && typeof input !== 'string' && 'tagName' in input) {
+      setFieldError(input, Array.isArray(messages) ? messages[0] : String(messages));
+    }
+  });
+}
+
+function profileEmailVerifyMarkup(email, message = '') {
+  return `<div class="account-email-verify" data-profile-email-verify>
+    <p class="eyebrow"><span></span> Підтвердження email</p>
+    <h2>Код з пошти</h2>
+    <p>Ми надіслали 6-значний код на <strong>${email}</strong>. Введіть його, щоб завершити зміну email. Поточна адреса в кабінеті ще не змінена.</p>
+    <form class="portal-form" data-profile-email-form novalidate>
+      <input type="hidden" name="email" value="${email}">
+      ${field('Код з листа', '<input name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" aria-describedby="profile-code-error" required>', 'profile-code')}
+      <p class="portal-form-status ${message ? 'is-success' : ''}" data-form-status tabindex="-1" aria-live="polite">${message}</p>
+      <div class="account-email-verify__actions">
+        <button class="button button--primary" type="submit">Підтвердити email</button>
+        <button class="button button--secondary" type="button" data-profile-email-resend>Надіслати код ще раз</button>
+        <button class="button button--secondary" type="button" data-profile-email-cancel>Скасувати зміну</button>
+      </div>
+    </form>
+  </div>`;
+}
+
+function renderProfileSection(profile, role, pendingEmail = '') {
+  const header = `<header class="account-content__header"><div><p class="eyebrow"><span></span> Налаштування</p><h1>Профіль користувача</h1><p>${pendingEmail ? 'Підтвердіть новий email кодом із листа, щоб завершити оновлення.' : 'Контактні дані для майбутньої роботи із заявками.'}</p></div></header>`;
+  if (pendingEmail) {
+    return `${header}${profileEmailVerifyMarkup(pendingEmail, 'Код уже надіслано на нову пошту.')}`;
+  }
+  return `${header}${profileForm(profile, role)}`;
+}
+
+function syncAccountUserChip(user) {
+  const chip = document.querySelector('.account-user');
+  if (!chip || !user) return;
+  const initials = String(user.name || '')
+    .split(' ')
+    .map(part => part[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('') || 'D';
+  const mark = chip.querySelector('span');
+  const name = chip.querySelector('strong');
+  if (mark) mark.textContent = initials;
+  if (name) name.textContent = user.name || 'Користувач';
+}
+
+function bindProfileForm(form) {
+  const inputs = [...form.querySelectorAll('input, select, textarea')].filter(input => !input.readOnly);
+  inputs.forEach(input => {
+    const eventName = input.tagName === 'SELECT' ? 'change' : 'input';
+    input.addEventListener(eventName, () => setFieldError(input));
+  });
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const invalid = inputs.filter(input => !validatePortalField(input, form));
+    if (invalid.length) {
+      setPortalStatus(form, 'Перевірте позначені поля.', 'is-error');
+      invalid[0].focus();
+      return;
+    }
+
+    const submit = form.querySelector('[type="submit"]');
+    setPortalButtonLoading(submit, true, 'Зберігаємо');
+    setPortalStatusLoading(form);
+
+    try {
+      const fd = new FormData(form);
+      const routes = window.Dwelchain?.routes || {};
+      const data = await api(routes.profileUpdate || '/account/profile', {
+        method: 'PUT',
+        body: {
+          name: fd.get('name'),
+          phone: fd.get('phone'),
+          email: fd.get('email'),
+          city: fd.get('city') || 'Київ'
+        }
+      });
+
+      if (data.user) {
+        setAuthState({
+          authenticated: true,
+          user: data.user,
+          csrfToken: data.csrf_token,
+          pendingEmailChange: data.pending_email_change !== undefined
+            ? data.pending_email_change
+            : window.Dwelchain?.pendingEmailChange
+        });
+        syncAccountUserChip(data.user);
+      }
+
+      if (data.status === 'email_change_required') {
+        const host = form.closest('.account-content') || form.parentElement;
+        if (!host) return;
+        host.innerHTML = renderProfileSection(data.user, new URLSearchParams(location.search).get('role') === 'landlord' ? 'landlord' : 'tenant', data.email);
+        bindProfileEmailVerify(host);
+        return;
+      }
+
+      setPortalStatus(form, '');
+      const message = form.querySelector('[data-form-status]');
+      if (message) {
+        message.className = 'portal-form-status is-success';
+        message.innerHTML = `<strong>Профіль збережено.</strong><span>${data.message || 'Зміни записано в кабінеті.'}</span>`;
+        message.focus({ preventScroll: true });
+      }
+    } catch (error) {
+      const errors = error.data?.errors || {};
+      applyPortalServerErrors(form, errors);
+      const first = Object.values(errors)[0];
+      const message = Array.isArray(first) ? first[0] : (error.data?.message || error.message || 'Не вдалося зберегти профіль.');
+      setPortalStatus(form, message, 'is-error');
+    } finally {
+      setPortalButtonLoading(submit, false);
+    }
+  });
+}
+
+function bindProfileEmailVerify(root) {
+  const form = root.querySelector('[data-profile-email-form]');
+  if (!form) return;
+
+  const codeInput = form.elements.code;
+  codeInput?.addEventListener('input', () => setFieldError(codeInput));
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!validatePortalField(codeInput, form)) {
+      setPortalStatus(form, 'Перевірте позначені поля.', 'is-error');
+      codeInput?.focus();
+      return;
+    }
+
+    const submit = form.querySelector('[type="submit"]');
+    const actions = [...form.querySelectorAll('button')];
+    actions.forEach(button => {
+      if (button === submit) setPortalButtonLoading(button, true, 'Підтверджуємо');
+      else button.disabled = true;
+    });
+    setPortalStatusLoading(form, 'Підтверджуємо…');
+
+    try {
+      const routes = window.Dwelchain?.routes || {};
+      const data = await api(routes.profileEmailConfirm || '/account/profile/email/confirm', {
+        method: 'POST',
+        body: {
+          email: form.elements.email.value,
+          code: form.elements.code.value
+        }
+      });
+
+      if (data.user) {
+        setAuthState({
+          authenticated: true,
+          user: data.user,
+          csrfToken: data.csrf_token,
+          pendingEmailChange: null
+        });
+      }
+      await renderAccount();
+      const status = document.querySelector('.account-profile-form [data-form-status]');
+      if (status) {
+        status.className = 'portal-form-status is-success';
+        status.innerHTML = `<strong>Email оновлено.</strong><span>${data.message || 'Профіль збережено.'}</span>`;
+        status.focus({ preventScroll: true });
+      }
+    } catch (error) {
+      const errors = error.data?.errors || {};
+      applyPortalServerErrors(form, errors);
+      const first = Object.values(errors)[0];
+      const message = Array.isArray(first) ? first[0] : (error.data?.message || error.message || 'Не вдалося підтвердити email.');
+      setPortalStatus(form, message, 'is-error');
+    } finally {
+      actions.forEach(button => {
+        if (button === submit) setPortalButtonLoading(button, false);
+        else button.disabled = false;
+      });
+    }
+  });
+
+  form.querySelector('[data-profile-email-resend]')?.addEventListener('click', async () => {
+    const button = form.querySelector('[data-profile-email-resend]');
+    const submit = form.querySelector('[type="submit"]');
+    setPortalButtonLoading(button, true, 'Надсилаємо код');
+    if (submit) submit.disabled = true;
+    setPortalStatusLoading(form, 'Надсилаємо код…');
+    try {
+      const routes = window.Dwelchain?.routes || {};
+      const data = await api(routes.profileEmailResend || '/account/profile/email/resend', {
+        method: 'POST',
+        body: { email: form.elements.email.value }
+      });
+      setPortalStatus(form, data.message || 'Новий код надіслано.', 'is-success');
+      if (data.pending_email_change !== undefined) {
+        setAuthState({ pendingEmailChange: data.pending_email_change, csrfToken: data.csrf_token });
+      }
+    } catch (error) {
+      const first = Object.values(error.data?.errors || {})[0];
+      const message = Array.isArray(first) ? first[0] : (error.data?.message || error.message || 'Не вдалося надіслати код.');
+      setPortalStatus(form, message, 'is-error');
+    } finally {
+      setPortalButtonLoading(button, false);
+      if (submit) submit.disabled = false;
+    }
+  });
+
+  form.querySelector('[data-profile-email-cancel]')?.addEventListener('click', async () => {
+    const button = form.querySelector('[data-profile-email-cancel]');
+    setPortalButtonLoading(button, true, 'Скасовуємо');
+    try {
+      const routes = window.Dwelchain?.routes || {};
+      const data = await api(routes.profileEmailCancel || '/account/profile/email/cancel', {
+        method: 'POST',
+        body: {}
+      });
+      setAuthState({ pendingEmailChange: null, csrfToken: data.csrf_token });
+      await renderAccount();
+    } catch (error) {
+      const message = error.data?.message || error.message || 'Не вдалося скасувати зміну email.';
+      setPortalStatus(form, message, 'is-error');
+      setPortalButtonLoading(button, false);
+    }
   });
 }
 
@@ -176,7 +430,7 @@ function profileForm(profile, role) {
     profile.is_tenant || role === 'tenant' ? 'Орендар' : null,
     profile.is_landlord || role === 'landlord' ? 'Орендодавець' : null
   ].filter(Boolean).join(' · ') || (role === 'tenant' ? 'Орендар' : 'Орендодавець');
-  return `<form class="portal-form account-profile-form" data-portal-form novalidate><div class="form-grid">${field('Ім’я та прізвище', `<input name="name" autocomplete="name" value="${profile.name || ''}" aria-describedby="profile-name-error" required>`, 'profile-name')}${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone || ''}" aria-describedby="profile-phone-error" required>`, 'profile-phone')}${field('Email', `<input name="email" type="email" autocomplete="email" value="${profile.email || ''}" aria-describedby="profile-email-error" required>`, 'profile-email')}${field('Місто', `<select name="city" aria-describedby="profile-city-error" required><option>${profile.city || 'Київ'}</option></select>`, 'profile-city')}</div>${field('Роль у системі', `<input value="${rolesLabel}" readonly>`, 'profile-role')}<p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary" type="submit">Зберегти зміни</button></form>`;
+  return `<form class="portal-form account-profile-form" data-portal-form data-profile-form novalidate><div class="form-grid">${field('Ім’я та прізвище', `<input name="name" autocomplete="name" value="${profile.name || ''}" aria-describedby="profile-name-error" required>`, 'profile-name')}${field('Телефон', `<input name="phone" type="tel" autocomplete="tel" value="${profile.phone || ''}" aria-describedby="profile-phone-error" required>`, 'profile-phone')}${field('Email', `<input name="email" type="email" autocomplete="email" value="${profile.email || ''}" aria-describedby="profile-email-error" required>`, 'profile-email')}${field('Місто', `<select name="city" aria-describedby="profile-city-error" required><option value="Київ">${profile.city || 'Київ'}</option></select>`, 'profile-city')}</div>${field('Роль у системі', `<input value="${rolesLabel}" readonly>`, 'profile-role')}<p class="portal-form-status" data-form-status tabindex="-1" aria-live="polite"></p><button class="button button--primary" type="submit">Зберегти зміни</button></form>`;
 }
 
 function offerForm(profile) {
@@ -204,7 +458,10 @@ function renderOwnerProperties(items) {
 function renderAccountContent(role, view, data, forceState) {
   const profile = data[role];
   if (forceState === 'error') return `<div class="portal-state portal-state--error"><span>!</span><h2>Не вдалося відкрити розділ</h2><p>Це демонстраційний error state кабінету.</p><a class="button button--primary" href="/account?role=${role}&view=${view}">Спробувати ще раз</a></div>`;
-  if (view === 'profile') return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Налаштування</p><h1>Профіль користувача</h1><p>Контактні дані для майбутньої роботи із заявками.</p></div></header>${profileForm(profile, role)}`;
+  if (view === 'profile') {
+    const pendingEmail = window.Dwelchain?.pendingEmailChange || '';
+    return renderProfileSection(profile, role, pendingEmail);
+  }
   if (role === 'landlord' && view === 'offer') {
     return `<header class="account-content__header"><div><p class="eyebrow"><span></span> Розміщення об’єкта</p><h1>Запропонувати об’єкт</h1><p>Заповніть основні відомості. Менеджер допоможе уточнити дані перед публікацією.</p></div></header>${offerForm(profile)}`;
   }
@@ -285,7 +542,16 @@ async function renderAccount() {
 
     root.innerHTML = `<div class="account-shell"><aside class="account-sidebar"><div class="account-user"><span>${initials}</span><div><strong>${profile.name}</strong><small>${roleLabel}</small></div></div>${roleSwitch}<nav class="account-nav" aria-label="Розділи особистого кабінету">${accountNavigation(role, view)}</nav><button class="account-logout" type="button" data-account-logout>Вийти</button></aside><section class="account-content">${renderAccountContent(role, view, data, forceState)}</section></div>`;
     root.querySelector('[data-account-logout]')?.addEventListener('click', () => logout());
+    const emailVerifyHost = root.querySelector('.account-content');
+    if (root.querySelector('[data-profile-email-form]') && emailVerifyHost) {
+      bindProfileEmailVerify(emailVerifyHost);
+    }
     root.querySelectorAll('[data-portal-form]').forEach(form => {
+      if (form.matches('[data-profile-email-form]')) return;
+      if (form.matches('[data-profile-form]')) {
+        bindProfileForm(form);
+        return;
+      }
       const isOffer = form.classList.contains('account-offer-form');
       bindPortalForm(form, isOffer
         ? '<strong>Пропозицію підготовлено.</strong><span>У наступній фазі вона зберігатиметься в базі для менеджера.</span>'

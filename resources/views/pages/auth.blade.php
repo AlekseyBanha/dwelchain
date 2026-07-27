@@ -29,6 +29,6 @@
     </section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-softnav6"></script>
+  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-profile2"></script>
 </body>
 </html>

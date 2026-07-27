@@ -283,6 +283,7 @@ class AuthController extends Controller
         return response()->json([
             'authenticated' => $user !== null,
             'user' => $user?->toClientArray(),
+            'pending_email_change' => $user ? $request->session()->get('pending_email_change') : null,
             'csrf_token' => csrf_token(),
         ]);
     }

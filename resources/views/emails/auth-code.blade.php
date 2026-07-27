@@ -1,5 +1,5 @@
 <x-mail::message>
-# {{ $purpose === 'password_reset' ? 'Відновлення пароля' : 'Підтвердження email' }}
+# {{ $purpose === 'password_reset' ? 'Відновлення пароля' : ($purpose === 'email_change' ? 'Підтвердження нового email' : 'Підтвердження email') }}
 
 Ваш код для Dwelchain:
 

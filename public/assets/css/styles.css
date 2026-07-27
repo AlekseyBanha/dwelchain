@@ -944,6 +944,11 @@ body.is-navigating-slow main { opacity: .35; }
 .account-profile-form { max-width: 760px; border: 1px solid #E0DFDA; border-radius: 12px; padding: 28px; background: var(--white); }
 .account-profile-form > .field { margin-top: 2px; }
 .account-profile-form .button { justify-self: start; min-width: 210px; }
+.account-email-verify { max-width: 560px; border: 1px solid #E0DFDA; border-radius: 12px; padding: 28px; background: var(--white); display: grid; gap: 12px; }
+.account-email-verify h2 { margin: 0; font-size: clamp(1.4rem, 2vw, 1.75rem); }
+.account-email-verify > p { margin: 0; color: var(--muted); }
+.account-email-verify__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.account-email-verify__actions .button { min-width: 0; }
 .owner-property-list { display: grid; gap: 14px; }
 .owner-property-row { display: grid; grid-template-columns: 180px minmax(0, 1fr) 150px; align-items: center; gap: 20px; overflow: hidden; border: 1px solid #E0DFDA; border-radius: 12px; padding: 13px; background: var(--white); }
 .owner-property-row__image { height: 128px; overflow: hidden; border-radius: 8px; background: var(--ink); }
