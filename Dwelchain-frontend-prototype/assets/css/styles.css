@@ -77,6 +77,10 @@ code { font-family: Consolas, monospace; }
 .button { display: inline-flex; min-height: 52px; align-items: center; justify-content: center; gap: 10px; border: 1px solid var(--gold); border-radius: 10px; padding: 13px 22px; background: linear-gradient(135deg, #C9A45A, #D6B56F); color: var(--ink); box-shadow: 0 9px 22px rgba(201,164,90,.2); font-family: var(--heading); font-size: 12px; font-weight: 700; letter-spacing: .02em; text-align: center; transition: background .2s, border-color .2s, box-shadow .2s, transform .2s; }
 .button::after { content: "→"; flex: 0 0 auto; margin-left: 3px; color: rgba(26,26,29,.8); font-size: 14px; font-weight: 500; line-height: 1; }
 .button > [aria-hidden="true"] { display: none; }
+.button.is-loading { position: relative; color: transparent; pointer-events: none; box-shadow: none; transform: none; cursor: wait; }
+.button.is-loading::after { content: ""; position: absolute; inset: 0; width: 18px; height: 18px; margin: auto; border: 2px solid rgba(26,26,29,.22); border-top-color: var(--ink); border-radius: 50%; animation: portal-spin .7s linear infinite; }
+.button.is-loading:disabled,
+.button.is-loading:hover { opacity: 1; box-shadow: none; transform: none; }
 .button:hover { border-color: #DDBE7E; background: linear-gradient(135deg, #D2AE64, #E0C488); box-shadow: 0 12px 28px rgba(201,164,90,.3); transform: translateY(-1px); }
 .button--primary,
 .button--secondary,
@@ -662,6 +666,8 @@ code { font-family: Consolas, monospace; }
 .portal-form-status.is-success { display: flex; flex-direction: column; gap: 3px; border: 1px solid #BCD1C2; padding: 14px 16px; background: #F7FCF8; color: #315E3D; }
 .portal-form-status.is-success strong { font-family: var(--heading); font-size: 11px; }
 .portal-form-status.is-success a { color: #6D5525; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.portal-form-status.is-loading { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); }
+.portal-form-status__spinner { flex: 0 0 auto; width: 16px; height: 16px; border: 2px solid #DDD8CC; border-top-color: var(--gold); border-radius: 50%; animation: portal-spin .8s linear infinite; }
 .auth-form__meta { display: flex; align-items: center; justify-content: space-between; }
 .auth-form__meta .checkbox-field { padding: 0; }
 .auth-form__meta > a { color: #715B31; font-size: 10px; font-weight: 700; }

@@ -6,7 +6,7 @@
   <meta name="description" content="Фото, ціна, характеристики та приблизне розташування об’єкта нерухомості в Києві.">
   <title>Об’єкт нерухомості в Києві | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
 <body data-page="property">

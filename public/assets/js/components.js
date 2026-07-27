@@ -1,5 +1,5 @@
 import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=20260725-accounts1';
-import { authGateMarkup, goToOfferForm, openAuthGate, shouldGateModal } from './auth.js?v=20260726-selects3';
+import { authGateMarkup, goToOfferForm, openAuthGate, shouldGateModal } from './auth.js?v=20260727-loaders1';
 import { initSelects } from './select.js?v=20260726-selects3';
 
 export function headerMarkup(active) {

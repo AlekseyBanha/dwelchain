@@ -6,7 +6,7 @@
   <meta name="description" content="Орієнтовне розташування об’єктів Dwelchain у Києві. Фільтруйте нерухомість і переходьте до детальної сторінки об’єкта.">
   <title>Об’єкти на карті Києва | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
 <body data-page="map">

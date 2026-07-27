@@ -6,7 +6,7 @@
   <meta name="description" content="Нерухомість у Києві для життя та інвестицій. Порівнюйте ціни, характеристики й райони, обирайте об’єкт і звертайтеся до менеджера щодо перегляду.">
   <title>Нерухомість у Києві для купівлі та оренди | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
 <body data-page="home">

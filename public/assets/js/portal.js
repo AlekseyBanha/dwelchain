@@ -1,6 +1,6 @@
 import { initDialogs, mountChrome, renderPropertyCard } from './components.js?v=20260726-selects3';
 import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260725-accounts1';
-import { initAuthPage, logout } from './auth.js?v=20260726-selects3';
+import { initAuthPage, logout } from './auth.js?v=20260727-loaders1';
 
 mountChrome();
 initDialogs();
@@ -70,6 +70,55 @@ async function loadAccounts() {
       if (!response.ok) throw new Error(`Не вдалося завантажити кабінет: ${response.status}`);
       return response.json();
     });
+}
+
+let accountsCache = null;
+let accountsPromise = null;
+let accountCabinetNavBound = false;
+let accountRenderToken = 0;
+
+async function getAccountsData() {
+  if (accountsCache) return accountsCache;
+  if (!accountsPromise) {
+    accountsPromise = loadAccounts()
+      .then(data => {
+        accountsCache = data;
+        return data;
+      })
+      .catch(error => {
+        accountsPromise = null;
+        throw error;
+      });
+  }
+  return accountsPromise;
+}
+
+function isAccountCabinetHref(href) {
+  try {
+    const url = new URL(href, location.href);
+    return url.origin === location.origin && url.pathname === '/account';
+  } catch {
+    return false;
+  }
+}
+
+function bindAccountCabinetNav(root) {
+  if (accountCabinetNavBound) return;
+  accountCabinetNavBound = true;
+  root.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href]');
+    if (!link || !root.contains(link) || !isAccountCabinetHref(link.getAttribute('href'))) return;
+    event.preventDefault();
+    const url = new URL(link.href, location.href);
+    const next = `${url.pathname}${url.search}`;
+    if (next === `${location.pathname}${location.search}`) return;
+    history.pushState({ portal: 'account' }, '', next);
+    renderAccount();
+  });
+  window.addEventListener('popstate', () => {
+    if (document.body.dataset.portalPage === 'account') renderAccount();
+  });
 }
 
 function getProperty(id) {
@@ -187,18 +236,20 @@ function renderAccountContent(role, view, data, forceState) {
 
 async function renderAccount() {
   const root = document.getElementById('account-root');
+  const renderToken = ++accountRenderToken;
   const authUser = window.Dwelchain?.user;
   if (!window.Dwelchain?.authenticated || !authUser) {
     window.location.replace('/auth?mode=login');
     return;
   }
 
+  const route = new URLSearchParams(location.search);
   const isTenant = Boolean(authUser.is_tenant);
   const isLandlord = Boolean(authUser.is_landlord);
-  const requestedView = params.get('view');
+  const requestedView = route.get('view');
 
   // UI-режим кабінету (як у прототипі): перемикач завжди доступний.
-  let role = params.get('role') === 'landlord' ? 'landlord' : 'tenant';
+  let role = route.get('role') === 'landlord' ? 'landlord' : 'tenant';
   if (requestedView === 'offer') {
     role = 'landlord';
   }
@@ -207,11 +258,13 @@ async function renderAccount() {
     ? ['overview', 'saved', 'viewings', 'profile']
     : ['overview', 'offer', 'properties', 'requests', 'profile'];
   const view = allowedViews.includes(requestedView) ? requestedView : 'overview';
-  const forceState = ['empty', 'error'].includes(params.get('state')) ? params.get('state') : '';
+  const forceState = ['empty', 'error'].includes(route.get('state')) ? route.get('state') : '';
   setMeta(role === 'tenant' ? 'Кабінет орендаря' : 'Кабінет орендодавця', 'Особистий кабінет Dwelchain.');
+  bindAccountCabinetNav(root);
 
   try {
-    const data = await loadAccounts();
+    const data = await getAccountsData();
+    if (renderToken !== accountRenderToken) return;
     const demoProfile = data[role] || data.tenant || data.landlord;
     const profile = {
       ...demoProfile,
@@ -241,6 +294,7 @@ async function renderAccount() {
         : '<strong>Зміни підготовлено.</strong><span>У цій версії дані профілю ще не зберігаються на сервері.</span>');
     });
   } catch (error) {
+    if (renderToken !== accountRenderToken) return;
     root.innerHTML = `<div class="portal-state portal-state--error portal-state--page"><span>!</span><h1>Не вдалося завантажити кабінет</h1><p>Перевірте локальні дані та спробуйте ще раз.</p><button class="button button--primary" type="button" data-retry>Спробувати ще раз</button></div>`;
     root.querySelector('[data-retry]').addEventListener('click', () => location.reload());
   }

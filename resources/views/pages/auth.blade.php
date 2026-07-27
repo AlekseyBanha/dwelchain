@@ -6,7 +6,7 @@
   <meta name="description" content="Демонстраційні екрани входу, реєстрації та відновлення доступу до кабінету Dwelchain.">
   <title>Вхід до кабінету | Dwelchain</title>
   <link rel="icon" type="image/png" href="{{ asset('assets/images/dwelchain-mark.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260726-selects4">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
   @include('partials.boot')
 </head>
 <body data-page="auth" data-portal-page="auth">
@@ -28,6 +28,6 @@
     </section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260726-selects3"></script>
+  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-account-nav1"></script>
 </body>
 </html>

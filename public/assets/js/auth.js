@@ -146,6 +146,22 @@ function setStatus(form, text, type = '') {
   if (text) node.focus({ preventScroll: true });
 }
 
+function setStatusLoading(form, label = 'Обробляємо…') {
+  const node = form.querySelector('[data-form-status]');
+  if (!node) return;
+  node.className = 'portal-form-status is-loading';
+  node.innerHTML = `<span class="portal-form-status__spinner" aria-hidden="true"></span><span>${label}</span>`;
+}
+
+function setButtonLoading(button, loading, busyLabel = 'Завантаження') {
+  if (!button) return;
+  button.classList.toggle('is-loading', loading);
+  button.disabled = loading;
+  button.setAttribute('aria-busy', loading ? 'true' : 'false');
+  if (loading) button.setAttribute('aria-label', busyLabel);
+  else button.removeAttribute('aria-label');
+}
+
 function verifyMarkup(email, { compact = false, purpose = 'register' } = {}) {
   const lead = purpose === 'password_reset'
     ? 'Введіть код із листа та новий пароль.'
@@ -252,8 +268,12 @@ async function handleAuthSubmit(form, root, options) {
   }
 
   const submit = form.querySelector('[type="submit"]');
-  if (submit) submit.disabled = true;
-  setStatus(form, 'Зачекайте…', '');
+  const actions = [...form.querySelectorAll('button')];
+  actions.forEach(button => {
+    if (button === submit) setButtonLoading(button, true, 'Обробляємо запит');
+    else button.disabled = true;
+  });
+  setStatusLoading(form);
 
   try {
     const fd = new FormData(form);
@@ -334,7 +354,10 @@ async function handleAuthSubmit(form, root, options) {
     const message = Array.isArray(first) ? first[0] : (error.data?.message || error.message || 'Сталася помилка.');
     setStatus(form, message, 'is-error');
   } finally {
-    if (submit) submit.disabled = false;
+    actions.forEach(button => {
+      if (button === submit) setButtonLoading(button, false);
+      else button.disabled = false;
+    });
   }
 }
 
@@ -362,7 +385,10 @@ function bindAuthRoot(root, options = {}) {
       const email = form?.elements.email?.value;
       const purpose = form?.elements.purpose?.value || 'register';
       if (!email) return;
-      button.disabled = true;
+      const submit = form.querySelector('[type="submit"]');
+      setButtonLoading(button, true, 'Надсилаємо код');
+      if (submit) submit.disabled = true;
+      setStatusLoading(form, 'Надсилаємо код…');
       try {
         const data = await api(boot().routes.resend, {
           method: 'POST',
@@ -373,7 +399,8 @@ function bindAuthRoot(root, options = {}) {
         const first = Object.values(error.data?.errors || {})[0];
         setStatus(form, Array.isArray(first) ? first[0] : (error.data?.message || error.message), 'is-error');
       } finally {
-        button.disabled = false;
+        setButtonLoading(button, false);
+        if (submit) submit.disabled = false;
       }
     });
   });
