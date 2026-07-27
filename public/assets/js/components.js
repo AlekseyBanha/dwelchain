@@ -1,6 +1,12 @@
-import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=20260727-images1';
+import { formatUah, formatUsd, imageAlts, propertyTypes } from './data.js?v=20260727-softnav6';
 import { authGateMarkup, goToOfferForm, openAuthGate, shouldGateModal } from './auth.js?v=20260727-loaders1';
 import { initSelects } from './select.js?v=20260726-selects3';
+
+const SOFT_NAV_PATHS = new Set(['/', '/catalog', '/map', '/property', '/design-system']);
+const pageBoots = Object.create(null);
+let softNavBound = false;
+let softNavToken = 0;
+let chromeMounted = false;
 
 export function headerMarkup(active) {
   const cabinetHref = window.Dwelchain?.authenticated ? '/account' : '/auth';
@@ -18,6 +24,196 @@ export function headerMarkup(active) {
       <button class="button button--header" type="button" data-account-offer>Запропонувати об’єкт <span aria-hidden="true">→</span></button>
     </div>
   </div></header>`;
+}
+
+export function registerPageBoot(name, boot) {
+  pageBoots[name] = boot;
+}
+
+export function refreshHeader() {
+  const active = document.body.dataset.page;
+  document.querySelectorAll('[data-site-header]').forEach(node => {
+    node.innerHTML = headerMarkup(active);
+  });
+}
+
+function scrollToHash(hash) {
+  const id = decodeURIComponent(String(hash || '').replace(/^#/, ''));
+  if (!id) return;
+  requestAnimationFrame(() => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+const SOFT_NAV_LOADER_DELAY_MS = 280;
+
+function closeOpenDialogs() {
+  document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+}
+
+function ensureSoftNavLoader() {
+  let loader = document.getElementById('soft-nav-loader');
+  if (loader) return loader;
+  loader = document.createElement('div');
+  loader.id = 'soft-nav-loader';
+  loader.className = 'soft-nav-loader';
+  loader.hidden = true;
+  loader.setAttribute('role', 'status');
+  loader.setAttribute('aria-live', 'polite');
+  loader.innerHTML = '<span class="soft-nav-loader__spinner" aria-hidden="true"></span><span class="sr-only">Завантаження сторінки…</span>';
+  document.body.appendChild(loader);
+  return loader;
+}
+
+function showSoftNavLoader(token) {
+  const loader = ensureSoftNavLoader();
+  loader.hidden = false;
+  document.body.classList.add('is-navigating', 'is-navigating-slow');
+  if (token != null && token !== softNavToken) hideSoftNavLoader();
+}
+
+function hideSoftNavLoader() {
+  const loader = document.getElementById('soft-nav-loader');
+  if (loader) loader.hidden = true;
+  document.body.classList.remove('is-navigating', 'is-navigating-slow');
+}
+
+function hardNavigateWithLoader(href) {
+  closeOpenDialogs();
+  showSoftNavLoader();
+  window.location.assign(href);
+}
+
+function canSoftNavigate(url) {
+  return SOFT_NAV_PATHS.has(url.pathname) && typeof pageBoots.app === 'function';
+}
+
+function isHeaderNavTarget(url) {
+  if (url.origin !== location.origin) return false;
+  if (url.protocol === 'mailto:' || url.protocol === 'tel:') return false;
+  return true;
+}
+
+async function softNavigate(href, { push = true } = {}) {
+  const next = new URL(href, location.href);
+  if (next.origin !== location.origin) {
+    window.location.assign(next.href);
+    return;
+  }
+
+  if (!canSoftNavigate(next)) {
+    hardNavigateWithLoader(next.href);
+    return;
+  }
+
+  const nextPath = `${next.pathname}${next.search}`;
+  const currentPath = `${location.pathname}${location.search}`;
+
+  if (nextPath === currentPath) {
+    if (next.hash) {
+      if (push) history.pushState({ soft: true }, '', `${nextPath}${next.hash}`);
+      scrollToHash(next.hash);
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const token = ++softNavToken;
+  let leaving = false;
+  closeOpenDialogs();
+  document.body.classList.add('is-navigating');
+  const loaderTimer = setTimeout(() => {
+    if (token === softNavToken) showSoftNavLoader(token);
+  }, SOFT_NAV_LOADER_DELAY_MS);
+
+  try {
+    const response = await fetch(nextPath, {
+      credentials: 'same-origin',
+      headers: { Accept: 'text/html', 'X-Requested-With': 'DwelchainSoftNav' }
+    });
+    if (!response.ok) throw new Error(`Soft nav failed: ${response.status}`);
+    const html = await response.text();
+    if (token !== softNavToken) return;
+
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    if (doc.body.dataset.portalPage || !SOFT_NAV_PATHS.has(new URL(response.url || nextPath, location.href).pathname)) {
+      leaving = true;
+      hardNavigateWithLoader(next.href);
+      return;
+    }
+
+    const newMain = doc.querySelector('main');
+    const oldMain = document.querySelector('main');
+    if (!newMain || !oldMain) {
+      leaving = true;
+      hardNavigateWithLoader(next.href);
+      return;
+    }
+
+    document.title = doc.title;
+    const description = doc.querySelector('meta[name="description"]')?.getAttribute('content');
+    if (description != null) {
+      document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+    }
+    document.body.dataset.page = doc.body.dataset.page || '';
+    document.body.removeAttribute('data-portal-page');
+    oldMain.replaceWith(document.importNode(newMain, true));
+    refreshHeader();
+    if (push) history.pushState({ soft: true }, '', `${nextPath}${next.hash}`);
+    pageBoots.app();
+    if (next.hash) scrollToHash(next.hash);
+    else window.scrollTo(0, 0);
+  } catch {
+    if (token === softNavToken) {
+      leaving = true;
+      hardNavigateWithLoader(next.href);
+    }
+  } finally {
+    clearTimeout(loaderTimer);
+    if (token === softNavToken && !leaving) hideSoftNavLoader();
+  }
+}
+
+export function initSoftNav() {
+  if (softNavBound) return;
+  softNavBound = true;
+
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href]');
+    if (!link || !link.closest('.site-header')) return;
+    if (link.hasAttribute('download') || link.target === '_blank') return;
+
+    let url;
+    try {
+      url = new URL(link.getAttribute('href'), location.href);
+    } catch {
+      return;
+    }
+    if (!isHeaderNavTarget(url)) return;
+
+    const nextPath = `${url.pathname}${url.search}`;
+    const currentPath = `${location.pathname}${location.search}`;
+    if (nextPath === currentPath && !url.hash) {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (nextPath === currentPath && url.hash && canSoftNavigate(url)) {
+      event.preventDefault();
+      softNavigate(url.href);
+      return;
+    }
+
+    event.preventDefault();
+    softNavigate(url.href);
+  });
+
+  window.addEventListener('popstate', () => {
+    if (!canSoftNavigate(new URL(location.href))) return;
+    softNavigate(location.href, { push: false });
+  });
 }
 
 export function footerMarkup() {
@@ -75,6 +271,11 @@ export function renderMapMock(location) {
 }
 
 export function mountChrome() {
+  if (chromeMounted) {
+    refreshHeader();
+    return;
+  }
+  chromeMounted = true;
   const active = document.body.dataset.page;
   document.querySelectorAll('[data-site-header]').forEach(node => node.innerHTML = headerMarkup(active));
   document.querySelectorAll('[data-site-footer]').forEach(node => node.innerHTML = footerMarkup());

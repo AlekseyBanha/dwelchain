@@ -8,7 +8,7 @@
   <title>Дизайн-система | Dwelchain</title>
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-softnav6">
   @include('partials.boot')
 </head>
 <body data-page="design-system">
@@ -31,6 +31,6 @@
     <section class="specimen"><div class="specimen__title"><span>13</span><h2>Компоненти кабінету</h2></div><div class="account-components-specimen"><div class="account-role-switch"><a class="is-active" href="{{ url('/account') }}?role=tenant">Орендар</a><a href="{{ url('/account') }}?role=landlord">Орендодавець</a></div><nav class="account-nav" aria-label="Приклад навігації кабінету"><a class="is-active" href="{{ url('/account') }}?role=tenant"><span aria-hidden="true"><svg class="account-nav__icon" width="18" height="18" focusable="false"><use href="#icon-overview"></use></svg></span>Огляд</a><a href="{{ url('/account') }}?role=tenant&amp;view=saved"><span aria-hidden="true"><svg class="account-nav__icon" width="18" height="18" focusable="false"><use href="#icon-properties"></use></svg></span>Збережені об’єкти</a><a href="{{ url('/account') }}?role=tenant&amp;view=viewings"><span aria-hidden="true"><svg class="account-nav__icon" width="18" height="18" focusable="false"><use href="#icon-requests"></use></svg></span>Мої перегляди</a></nav><div class="account-components-specimen__states"><span class="account-status is-new">Нова заявка</span><span class="account-status is-pending">Потребує підтвердження</span><span class="account-status is-complete">Завершено</span><div class="prototype-notice"><b>Демонстраційний кабінет</b><span>Дані не зберігаються.</span></div></div></div></section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260727-images1"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260727-softnav6"></script>
 </body>
 </html>

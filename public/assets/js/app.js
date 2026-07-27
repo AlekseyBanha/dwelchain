@@ -1,10 +1,17 @@
-import { dataLoadError, properties, propertyTypes, formatUah, formatUsd, imageAlts } from './data.js?v=20260727-images1';
-import { initDialogs, mountChrome, renderMapMock, renderPropertyCard } from './components.js?v=20260727-images1';
+import { dataLoadError, properties, propertyTypes, formatUah, formatUsd, imageAlts } from './data.js?v=20260727-softnav6';
+import { initDialogs, initSoftNav, mountChrome, registerPageBoot, renderMapMock, renderPropertyCard } from './components.js?v=20260727-softnav6';
 
 mountChrome();
 initDialogs();
 
-const page = document.body.dataset.page;
+function bootAppPage() {
+  const page = document.body.dataset.page;
+  if (page === 'home') initHome();
+  if (page === 'catalog') initCatalog();
+  if (page === 'property') initProperty();
+  if (page === 'map') initMapPage();
+  if (page === 'design-system') initDesignSystem();
+}
 
 const advancedFilterKeys = ['minArea', 'maxArea', 'floor', 'totalFloors', 'furnished', 'renovation', 'pets', 'parking', 'balcony', 'buildingType', 'developer', 'marketType'];
 const filterNames = {
@@ -131,12 +138,6 @@ function filterChipText(key, value) {
   if (['deal', 'district', 'type', 'city'].includes(key)) return label;
   return `${filterNames[key]}: ${label}`;
 }
-
-if (page === 'home') initHome();
-if (page === 'catalog') initCatalog();
-if (page === 'property') initProperty();
-if (page === 'map') initMapPage();
-if (page === 'design-system') initDesignSystem();
 
 function initHome() {
   const recommendationError = '<div class="inline-notification inline-notification--error" role="alert">Не вдалося завантажити рекомендовані об’єкти. Оновіть сторінку, щоб спробувати ще раз.</div>';
@@ -610,3 +611,7 @@ function initDesignSystem() {
   document.getElementById('design-map').innerHTML = renderMapMock({ district: 'Печерський', address: 'поблизу Ботанічного саду', mapPosition: 0 });
   document.getElementById('design-map-empty').innerHTML = renderMapMock('');
 }
+
+registerPageBoot('app', bootAppPage);
+initSoftNav();
+bootAppPage();

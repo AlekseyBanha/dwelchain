@@ -7,7 +7,7 @@
   <title>Особистий кабінет | Dwelchain</title>
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-loaders1">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-softnav6">
   @include('partials.boot')
 </head>
 <body data-page="account" data-portal-page="account">
@@ -19,6 +19,6 @@
     </div>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-images1"></script>
+  <script type="module" src="{{ asset('assets/js/portal.js') }}?v=20260727-softnav6"></script>
 </body>
 </html>

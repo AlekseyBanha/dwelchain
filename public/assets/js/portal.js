@@ -1,9 +1,10 @@
-import { initDialogs, mountChrome, renderPropertyCard } from './components.js?v=20260727-images1';
-import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-images1';
+import { initDialogs, initSoftNav, mountChrome, renderPropertyCard } from './components.js?v=20260727-softnav6';
+import { dataLoadError, formatUsd, properties, propertyTypes } from './data.js?v=20260727-softnav6';
 import { initAuthPage, logout } from './auth.js?v=20260727-loaders1';
 
 mountChrome();
 initDialogs();
+initSoftNav();
 
 const portalPage = document.body.dataset.portalPage;
 const params = new URLSearchParams(location.search);
