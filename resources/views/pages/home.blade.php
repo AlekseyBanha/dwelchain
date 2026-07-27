@@ -7,13 +7,14 @@
   <title>Нерухомість у Києві для купівлі та оренди | Dwelchain</title>
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/images/favicon-32.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-180.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-softnav6">
+  <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}?v=20260727-mapcards">
   @include('partials.boot')
 </head>
 <body data-page="home">
   <div data-site-header></div>
   <main>
     <section class="home-hub section-shell" data-section-tone="light" aria-labelledby="home-hub-title">
+      <nav class="breadcrumbs breadcrumbs--compact home-hub__crumb-reserve" aria-hidden="true"><span>Головна</span></nav>
       <div class="home-hub__browser">
         <div class="home-hub__top">
           <div>
@@ -293,6 +294,6 @@
     </section>
   </main>
   <div data-site-footer></div>
-  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260727-softnav6"></script>
+  <script type="module" src="{{ asset('assets/js/app.js') }}?v=20260727-breadcrumbs2"></script>
 </body>
 </html>

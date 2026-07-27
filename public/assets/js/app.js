@@ -533,7 +533,7 @@ function initProperty() {
     propertyTypes[item.type] ? ['Тип', propertyTypes[item.type]] : null
   ].filter(Boolean);
   root.innerHTML = `<section class="property-head section-shell">
-      <nav class="breadcrumbs" aria-label="Навігаційний шлях"><a href="/">Головна</a><span>·</span><a href="/catalog">Каталог</a><span>·</span><span>${item.title}</span></nav>
+      <nav class="breadcrumbs breadcrumbs--compact" aria-label="Навігаційний шлях"><a href="/">Головна</a><span>·</span><a href="/catalog">Каталог</a><span>·</span><span>${item.title}</span></nav>
       <div class="property-head__row"><div><div class="property-head__badges"><span class="badge badge--dark">${item.deal === 'sale' ? 'Купівля' : 'Оренда'}</span>${item.isNew ? '<span class="badge">Нове оголошення</span>' : ''}</div><h1>${item.title}</h1><p>${item.district || 'Район уточнюється'}${item.address ? ` · ${item.address}` : ''}</p></div><div class="property-head__price"><strong>${formatUsd(item.priceUsd)}<small>${unit}</small></strong><span>≈ ${formatUah(item.priceUah)}${item.deal === 'sale' ? ` · ${formatUsd(Math.round(item.priceUsd / item.area))}/м²` : ' на місяць'}</span></div></div>
     </section>
     ${images.length ? `<section class="gallery section-shell">
